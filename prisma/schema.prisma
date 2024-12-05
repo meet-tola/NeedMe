@@ -1,0 +1,64 @@
+// This is your Prisma schema file
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Business {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String
+  logoURL        String?
+  description    String?
+  contactInfo    String
+  address        String?
+  operatingHours String?
+  // subdomain      String   @unique
+  forms          Form[]
+
+  userId         String
+}
+
+model Form {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  createdAt   DateTime @default(now())
+  published   Boolean  @default(false)
+  name        String
+  description String   @default("")
+  content     String   @default("[]")
+
+  totalAppointments Int @default(0)
+  submissions       Int @default(0)
+
+  shareURL        String            @default(uuid())
+  FormSubmissions FormSubmissions[]
+
+  businessId Int
+  business   Business @relation(fields: [businessId], references: [id])
+
+  // Appointment Rules
+  // appointmentDuration  Int 
+  // bufferTime           Int 
+  // maxDailyAppointments Int 
+  // availableDays        String @default("[]") 
+  // availableTimeSlots   String @default("[]") 
+
+  @@unique([name, userId])
+}
+
+model FormSubmissions {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  formId    Int
+  form      Form     @relation(fields: [formId], references: [id])
+  content   String
+}
