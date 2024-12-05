@@ -47,7 +47,7 @@ export async function GetFormStats() {
     } catch (error) {
         console.error("Error in GetFormStats:", error);
         throw error;
-    } 
+    }
 }
 export async function CreateForm(data: formSchemaType) {
     const validation = formSchema.safeParse(data);
@@ -60,7 +60,7 @@ export async function CreateForm(data: formSchemaType) {
         throw new UserNotFoundErr();
     }
 
-    const businessId = await GetBusinessId(); 
+    const businessId = await GetBusinessId();
 
     const { name, description } = data;
 
@@ -91,9 +91,23 @@ export async function GetForms() {
     return await prisma.form.findMany({
         where: {
             userId: user.id,
-        }, 
+        },
         orderBy: {
             createdAt: "desc"
+        }
+    })
+}
+
+export async function GetFormById(id: number) {
+    const user = await currentUser();
+    if (!user) {
+        throw new UserNotFoundErr()
+    }
+
+    return await prisma.form.findUnique({
+        where: {
+            userId: user.id,
+            id
         }
     })
 }
