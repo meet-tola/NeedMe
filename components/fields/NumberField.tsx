@@ -1,19 +1,20 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   ElementsType,
   FormElement,
   FormElementInstance,
   SubmitFunction,
 } from "../builders/form-element";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
 import useDesigner from "@/hooks/useDesigner";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
+import { cn } from "@/lib/utils";
 import {
   Form,
   FormControl,
@@ -24,16 +25,15 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Switch } from "../ui/switch";
-import { cn } from "@/lib/utils";
-import { TypeOutline } from "lucide-react";
+import { FileDigit } from "lucide-react";
 
-const type: ElementsType = "TextField";
+const type: ElementsType = "NumberField";
 
 const extraAttributes = {
-  label: "Text field",
+  label: "Number field",
   helperText: "Helper text",
   required: false,
-  placeHolder: "Value here...",
+  placeHolder: "0",
 };
 
 const propertiesSchema = z.object({
@@ -43,7 +43,7 @@ const propertiesSchema = z.object({
   placeHolder: z.string().max(50),
 });
 
-export const TextFieldFormElement: FormElement = {
+export const NumberFieldFormElement: FormElement = {
   type,
   construct: (id: string) => ({
     id,
@@ -51,8 +51,8 @@ export const TextFieldFormElement: FormElement = {
     extraAttributes,
   }),
   designerBtnElement: {
-    icon: TypeOutline,
-    label: "Text Field",
+    icon: FileDigit,
+    label: "Number Field",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
@@ -88,7 +88,7 @@ function DesignerComponent({
         {label}
         {required && "*"}
       </Label>
-      <Input readOnly disabled placeholder={placeHolder} />
+      <Input readOnly disabled type="number" placeholder={placeHolder} />
       {helperText && (
         <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
       )}
@@ -124,12 +124,16 @@ function FormComponent({
         {required && "*"}
       </Label>
       <Input
+        type="number"
         className={cn(error && "border-red-500")}
         placeholder={placeHolder}
         onChange={(e) => setValue(e.target.value)}
         onBlur={(e) => {
           if (!submitValue) return;
-          const valid = TextFieldFormElement.validate(element, e.target.value);
+          const valid = NumberFieldFormElement.validate(
+            element,
+            e.target.value
+          );
           setError(!valid);
           if (!valid) return;
           submitValue(element.id, e.target.value);
