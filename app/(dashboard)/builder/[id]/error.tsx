@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export default function ErrorPage({ error }: { error: Error }) {
   useEffect(() => {
-    console.error(error);
+    if (error) console.error(error);
   }, [error]);
   
   return (
