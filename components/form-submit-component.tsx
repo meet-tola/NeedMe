@@ -13,7 +13,7 @@ function FormSubmitComponent({
 }: {
   content: FormElementInstance[];
   formUrl: string;
-}) {
+}) {  
   const formValues = useRef<{ [key: string]: string }>({});
   const formErrors = useRef<{ [key: string]: boolean }>({});
   const [renderKey, setRenderKey] = useState(new Date().getTime());

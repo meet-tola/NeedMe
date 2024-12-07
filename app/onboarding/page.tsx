@@ -22,12 +22,12 @@ import { LogoUpload } from "@/components/logo-upload";
 import { CreateBusiness, GetBusinessId } from "@/actions/business";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import Logo from "@/components/Logo";
 
 export default function OnboardingPage() {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const router = useRouter();
 
-  // Redirect if business exists
   useEffect(() => {
     async function checkBusiness() {
       try {
@@ -92,12 +92,7 @@ export default function OnboardingPage() {
         <div className="max-w-2xl mx-auto">
           {/* SaaS Logo */}
           <div className="mb-8">
-            <Image
-              src="https://via.placeholder.com/200x50"
-              alt="SaaS Logo"
-              width={200}
-              height={50}
-            />
+            <Logo />
           </div>
 
           <h1 className="text-3xl font-bold mb-6">

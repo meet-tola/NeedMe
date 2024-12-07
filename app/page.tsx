@@ -11,7 +11,7 @@ export default function Home() {
   const { user, isSignedIn } = useUser();
 
   if (user) {
-    return redirect("/dashboard");
+    return redirect("/onboarding");
   }
 
   return (
@@ -20,7 +20,6 @@ export default function Home() {
         <div className="container flex items-center justify-between">
           <Link href="/" className="flex items-center justify-center gap-2">
             <Logo />
-            <span className="text-xl font-semibold">NeedMe</span>
           </Link>
           <div className="flex items-center gap-x-3">
             <ThemeToggle />

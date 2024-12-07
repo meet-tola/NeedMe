@@ -5,9 +5,11 @@ import {
   ArrowUpLeftFromSquare,
   CalendarDays,
   CheckCircle,
+  CheckSquare,
   ClipboardCheck,
   Clock,
   Edit2,
+  Eye,
   FormInput,
   View,
 } from "lucide-react";
@@ -20,7 +22,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { Suspense } from "react";
+import { ReactNode, Suspense } from "react";
 import { Separator } from "./ui/separator";
 import CreatFormBtn from "./create-form-button";
 import { Form } from "@prisma/client";
@@ -87,9 +89,9 @@ function StatsCards(props: StatsCardProps) {
         loading={loading}
       />
       <StatsCard
-        title="Completed Appointments"
+        title="Cancelled Appointments"
         icon={<CheckCircle className="h-4 w-4 text-muted-foreground" />}
-        helperText="Successfully completed appointments"
+        helperText="All cancelled appointments"
         value={data?.bounceRate.toLocaleString() || ""}
         loading={loading}
       />
@@ -97,7 +99,7 @@ function StatsCards(props: StatsCardProps) {
   );
 }
 
-function StatsCard({
+export function StatsCard({
   title,
   value,
   icon,
@@ -151,13 +153,32 @@ const FormCards = React.lazy(async () => {
   return {
     default: () => (
       <>
-        {forms.map((form) => (
-          <FormCard key={form.id} form={form} />
-        ))}
+        {forms.length === 0 ? (
+          <NoFormsCard />
+        ) : (
+          forms.map((form) => <FormCard key={form.id} form={form} />)
+        )}
       </>
     ),
   };
 });
+
+function NoFormsCard() {
+  return (
+    <Card className="border-dashed border-2 border-muted-foreground">
+      <CardContent className="text-center">
+        <h3 className="text-xl font-semibold">No Forms Yet</h3>
+        <p className="text-sm text-muted-foreground mt-2">
+          Create your first appointment form to get started!
+        </p>
+        <div className="mt-4">
+          <CreatFormBtn />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 
 function FormCard({ form }: { form: Form }) {
   return (
@@ -172,47 +193,44 @@ function FormCard({ form }: { form: Form }) {
             </Badge>
           )}
         </CardTitle>
-        <CardDescription className="flex items-center justify-between text-muted-foreground text-sm">
-          {formatDistance(form.createdAt, new Date(), { addSuffix: true })}
-          {form.published && (
-            <span className="flex items-center gap-2">
-              <View /> <span>{form.totalAppointments.toLocaleString()}</span>
-              <ClipboardCheck />{" "}
-              <span>{form.submissions.toLocaleString()}</span>
-            </span>
-          )}
+        <CardDescription className="h-[20px] truncate text-sm text-muted-foreground">
+          {form.description || "No description"}
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-[20px] truncate text-sm text-muted-foreground">
-        {form.description || "No description"}
-      </CardContent>
-      <CardFooter className="flex flex-wrap gap-2 mt-3">
+
+      <CardContent className="flex items-center justify-between text-muted-foreground text-sm">
+        {formatDistance(form.createdAt, new Date(), { addSuffix: true })}
         {form.published && (
-          <Button asChild className="w-full mt-2 text-md gap-4">
-            <Link href={`/forms/${form.id}`}>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center">
+              <Eye className="mr-2 h-4 w-4" />
+              <span>{form.totalAppointments.toLocaleString()}</span>
+            </div>
+            <div className="flex items-center">
+              <CheckSquare className="mr-2 h-4 w-4" />
+              <span>{form.submissions.toLocaleString()}</span>
+            </div>
+          </div>
+        )}
+      </CardContent>
+
+      <CardFooter className="flex items-center gap-2">
+        {form.published && (
+          <Button asChild className="w-full">
+            <Link href={`/appointment/${form.id}`}>
               View booking <ArrowRight />
             </Link>
           </Button>
         )}
         {!form.published && (
-          <Button
-            asChild
-            variant={"outline"}
-          >
+          <Button asChild variant={"outline"} className="w-full">
             <Link href={`/builder/${form.id}`}>
               <Edit2 /> Edit form
             </Link>
           </Button>
         )}
-        <Button variant="outline" size="sm">
+        <Button variant="outline" className="w-full">
           Share Link
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="text-red-500 hover:text-red-700"
-        >
-          Delete
         </Button>
       </CardFooter>
     </Card>

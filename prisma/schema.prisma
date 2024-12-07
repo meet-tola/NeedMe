@@ -24,33 +24,32 @@ model Business {
   // subdomain      String   @unique
   forms          Form[]
 
-  userId         String
+  userId String
 }
 
 model Form {
-  id          Int      @id @default(autoincrement())
-  userId      String
-  createdAt   DateTime @default(now())
-  published   Boolean  @default(false)
-  name        String
-  description String   @default("")
-  content     String   @default("[]")
+  id                  Int       @id @default(autoincrement())
+  userId              String
+  createdAt           DateTime  @default(now())
+  published           Boolean   @default(false)
+  name                String
+  description         String    @default("")
+  appointmentype      String?
+  appointmentDuration Int?
+  startDate           DateTime?
+  endDate             DateTime?
+  availability        String?   @default("")
+  content             String    @default("[]")
 
   totalAppointments Int @default(0)
   submissions       Int @default(0)
 
-  shareURL        String            @default(uuid())
+  shareURL        String            @unique @default(uuid())
   FormSubmissions FormSubmissions[]
 
-  businessId Int
-  business   Business @relation(fields: [businessId], references: [id])
-
-  // Appointment Rules
-  // appointmentDuration  Int 
-  // bufferTime           Int 
-  // maxDailyAppointments Int 
-  // availableDays        String @default("[]") 
-  // availableTimeSlots   String @default("[]") 
+  businessId  Int
+  business    Business      @relation(fields: [businessId], references: [id])
+  UserDetails UserDetails[]
 
   @@unique([name, userId])
 }
@@ -61,4 +60,17 @@ model FormSubmissions {
   formId    Int
   form      Form     @relation(fields: [formId], references: [id])
   content   String
+}
+
+model UserDetails {
+  id        Int      @id @default(autoincrement())
+  formId    Int
+  name      String
+  email     String
+  phone     String
+  createdAt DateTime @default(now())
+
+  form Form @relation(fields: [formId], references: [id])
+
+  @@index([formId])
 }

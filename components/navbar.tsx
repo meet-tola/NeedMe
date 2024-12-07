@@ -1,21 +1,18 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Bell, Menu, User } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+import Link from "next/link";
+import { Bell, Menu, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { UserButton } from "@clerk/nextjs"
-import { ThemeToggle } from "./ThemeToggle"
+} from "@/components/ui/dropdown-menu";
+import { UserButton } from "@clerk/nextjs";
+import { ThemeToggle } from "./ThemeToggle";
+import Logo from "./Logo";
 
 export function Navbar() {
   return (
@@ -25,7 +22,11 @@ export function Navbar() {
           <div className="flex items-center">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="mr-2 md:hidden text-gray-500 dark:text-gray-400">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="mr-2 md:hidden text-gray-500 dark:text-gray-400"
+                >
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open main menu</span>
                 </Button>
@@ -35,20 +36,7 @@ export function Navbar() {
               </SheetContent>
             </Sheet>
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <svg
-                className="h-8 w-auto text-indigo-600 dark:text-indigo-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-              <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">NeedMe</span>
+              <Logo />
             </Link>
           </div>
           <div className="hidden md:ml-6 md:flex md:space-x-8">
@@ -71,7 +59,7 @@ export function Navbar() {
               Settings
             </Link>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <NotificationDropdown />
             <ThemeToggle />
             <UserButton />
@@ -79,43 +67,66 @@ export function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
 
 export function MobileMenu() {
   return (
     <div className="py-6 px-4">
-      <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Menu</h2>
+      <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+        Menu
+      </h2>
       <nav className="space-y-4">
-        <Link href="#" className="block py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">
+        <Link
+          href="#"
+          className="block py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
+        >
           Dashboard
         </Link>
-        <Link href="#" className="block py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">
+        <Link
+          href="#"
+          className="block py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
+        >
           Team
         </Link>
-        <Link href="#" className="block py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">
+        <Link
+          href="#"
+          className="block py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
+        >
           Projects
         </Link>
       </nav>
       <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-        <Button variant="ghost" size="sm" className="w-full justify-start mb-2 text-gray-700 dark:text-gray-300">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start mb-2 text-gray-700 dark:text-gray-300"
+        >
           <Bell className="h-5 w-5 mr-2" />
           Notifications
         </Button>
-        <Button variant="ghost" size="sm" className="w-full justify-start text-gray-700 dark:text-gray-300">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start text-gray-700 dark:text-gray-300"
+        >
           <User className="h-5 w-5 mr-2" />
           Profile
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 export function NotificationDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative text-gray-500 dark:text-gray-400">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative text-gray-500 dark:text-gray-400"
+        >
           <Bell className="h-5 w-5" />
           <span className="sr-only">View notifications</span>
           <div className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></div>
@@ -126,8 +137,12 @@ export function NotificationDropdown() {
           <div className="flex items-start space-x-2">
             <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
             <div className="flex flex-col">
-              <span className="font-medium dark:text-white">New Appointment</span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">You have a new appointment scheduled for tomorrow at 2 PM.</span>
+              <span className="font-medium dark:text-white">
+                New Appointment
+              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                You have a new appointment scheduled for tomorrow at 2 PM.
+              </span>
             </div>
           </div>
         </DropdownMenuItem>
@@ -135,8 +150,12 @@ export function NotificationDropdown() {
           <div className="flex items-start space-x-2">
             <div className="w-2 h-2 bg-transparent rounded-full mt-2"></div>
             <div className="flex flex-col">
-              <span className="font-medium dark:text-white">Approve Appointment</span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">John Doe requested an appointment for next week. Please approve.</span>
+              <span className="font-medium dark:text-white">
+                Approve Appointment
+              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                John Doe requested an appointment for next week. Please approve.
+              </span>
             </div>
           </div>
         </DropdownMenuItem>
@@ -147,5 +166,5 @@ export function NotificationDropdown() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

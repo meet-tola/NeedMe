@@ -12,6 +12,8 @@ function SaveFormBtn({ id }: { id: number }) {
   const updateFormContent = async () => {
     try {
       const jsonElements = JSON.stringify(elements);
+      console.log("Content details", jsonElements);
+      
       await UpdateFormContent(id, jsonElements);
       toast({
         title: "Success",
