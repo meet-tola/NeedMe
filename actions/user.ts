@@ -1,16 +1,21 @@
+"use server";
+
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { userSchema, UserSchemaType } from "@/schema/users";
 
-export async function StoreFormDetails(data: UserSchemaType) {
+export async function UserDetails(data: UserSchemaType) {
     const validation = userSchema.safeParse(data);
     if (!validation.success) {
         throw new Error("Form not valid");
     }
 
-    const { name, email, phone, formId } = data;
+    const { name, email, phone, formShareURL } = data;
     const form = await prisma.form.findUnique({
-        where: { id: formId },
+        where: {
+            shareURL: formShareURL,
+            published: true,
+          },
     });
 
     if (!form) {
@@ -19,22 +24,23 @@ export async function StoreFormDetails(data: UserSchemaType) {
 
     return await prisma.userDetails.create({
         data: {
-            formId,
+            formShareURL,
             name,
             email,
             phone,
+            status: "pending",
         },
     });
 }
 
-export async function GetUserDetails(formId: number) {
+export async function GetUserDetails(formShareURL: string) {
     const user = await currentUser();
     if (!user) {
         throw new Error("User not authenticated");
     }
 
     const form = await prisma.form.findUnique({
-        where: { id: formId, userId: user.id },
+        where: { shareURL: formShareURL, userId: user.id },
     });
 
     if (!form) {
@@ -42,7 +48,47 @@ export async function GetUserDetails(formId: number) {
     }
 
     return await prisma.userDetails.findMany({
-        where: { formId },
+        where: { formShareURL },
         orderBy: { createdAt: "desc" },
     });
+}
+
+export async function ScheduleAppointment(formShareURL: string, id: number) {
+    const user = await currentUser();
+    if (!user) {
+        throw new Error("User not authenticated");
+    }
+
+    const form = await prisma.form.findUnique({
+        where: { shareURL: formShareURL, userId: user.id },
+    });
+
+    if (!form) {
+        throw new Error("Form not found or unauthorized access");
+    }
+
+    return await prisma.userDetails.update({
+        where: { id },
+        data: { status: "approved" },
+      });
+}
+
+export async function CancelAppointment(formShareURL: string, id: number) {
+    const user = await currentUser();
+    if (!user) {
+        throw new Error("User not authenticated");
+    }
+
+    const form = await prisma.form.findUnique({
+        where: { shareURL: formShareURL, userId: user.id },
+    });
+
+    if (!form) {
+        throw new Error("Form not found or unauthorized access");
+    }
+
+    return await prisma.userDetails.update({
+        where: { id },
+        data: { status: "canceled" },
+      });
 }

@@ -1,52 +1,48 @@
 "use client";
-import React from "react";
-import { z } from "zod";
-import FormSubmitComponent from "@/components/form-submit-component";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
-import { FormElementInstance } from "./builders/form-element";
-import { UserSchemaType, userSchema } from "@/schema/users";
-import { CreateForm } from "@/actions/form";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
+import { UserSchemaType, userSchema } from "@/schema/users";
+import { UserDetails } from "@/actions/user";
+import FormSubmitComponent from "@/components/form-submit-component";
+import { FormElementInstance } from "./builders/form-element";
 
-function PreStepForm({
+export default function PreStepForm({
   formUrl,
   content,
 }: {
   formUrl: string;
   content: FormElementInstance[];
 }) {
-  const [preStepCompleted, setPreStepCompleted] = React.useState(false);
+  const [preStepCompleted, setPreStepCompleted] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue, // To set the default formUrl value
-    formState: { errors },
-  } = useForm<UserSchemaType>({
+  const form = useForm<UserSchemaType>({
     resolver: zodResolver(userSchema),
     defaultValues: {
       name: "",
       email: "",
       phone: "",
-      formId: "", 
+      formShareURL: "",
     },
   });
 
-  React.useEffect(() => {
-    setValue("formId", formUrl);
-  }, [formUrl, setValue]);
+  useEffect(() => {
+    form.setValue("formShareURL", formUrl);
+  }, [formUrl, form]);
+  
 
-  const onSubmit = async (values: UserSchemaType) => {
+  async function onSubmit(values: UserSchemaType) {
     try {
-      const formId = await CreateForm(values);
-
+      await UserDetails(values); 
       toast({
         title: "Success",
-        description: "Form created successfully",
+        description: "Form submitted successfully",
       });
-
+      
       setPreStepCompleted(true);
     } catch (error) {
       toast({
@@ -55,78 +51,76 @@ function PreStepForm({
         variant: "destructive",
       });
     }
-  };
+  }
 
   if (preStepCompleted) {
     return <FormSubmitComponent formUrl={formUrl} content={content} />;
   }
 
   return (
-    <div className="flex justify-center w-full h-full items-center p-8">
-      <div className="max-w-[620px] flex flex-col gap-4 flex-grow bg-background w-full p-8 overflow-y-auto border shadow-xl shadow-blue-700 rounded">
-        <h1 className="text-2xl font-bold">Welcome to the Form</h1>
-        <p className="text-muted-foreground">
-          Please fill out the information below to continue.
-        </p>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
+    <div className="max-w-lg mx-auto p-4">
+      <h1 className="text-xl font-bold mb-4">Welcome to the Form</h1>
+      <p className="text-muted-foreground mb-6">
+        Please fill out the information below to continue.
+      </p>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-muted-foreground">
+            Name
+          </label>
+          <Input
+            type="text"
+            {...form.register("name")}
+            placeholder="Enter your name"
+            className="w-full"
+          />
+          {form.formState.errors.name && (
+            <span className="text-red-500 text-sm">
+              {form.formState.errors.name.message}
+            </span>
+          )}
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-muted-foreground">
+            Email
+          </label>
+          <Input
+            type="email"
+            {...form.register("email")}
+            placeholder="Enter your email"
+            className="w-full"
+          />
+          {form.formState.errors.email && (
+            <span className="text-red-500 text-sm">
+              {form.formState.errors.email.message}
+            </span>
+          )}
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-muted-foreground">
+            Phone Number
+          </label>
+          <Input
+            type="text"
+            {...form.register("phone")}
+            placeholder="Enter your phone number"
+            className="w-full"
+          />
+          {form.formState.errors.phone && (
+            <span className="text-red-500 text-sm">
+              {form.formState.errors.phone.message}
+            </span>
+          )}
+        </div>
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting}
+          className="w-full mt-4"
         >
-          <div>
-            <label className="block text-sm font-medium text-muted-foreground">
-              Name
-            </label>
-            <input
-              type="text"
-              {...register("name")}
-              className="block w-full mt-1 p-2 border rounded"
-              placeholder="Enter your name"
-            />
-            {errors.name && (
-              <span className="text-red-500 text-sm">
-                {errors.name.message}
-              </span>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-muted-foreground">
-              Email
-            </label>
-            <input
-              type="email"
-              {...register("email")}
-              className="block w-full mt-1 p-2 border rounded"
-              placeholder="Enter your email"
-            />
-            {errors.email && (
-              <span className="text-red-500 text-sm">
-                {errors.email.message}
-              </span>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-muted-foreground">
-              Phone Number
-            </label>
-            <input
-              type="text"
-              {...register("phone")}
-              className="block w-full mt-1 p-2 border rounded"
-              placeholder="Enter your phone number"
-            />
-            {errors.phone && (
-              <span className="text-red-500 text-sm">
-                {errors.phone.message}
-              </span>
-            )}
-          </div>
-          <Button className="mt-4" type="submit">
-            Submit
-          </Button>
-        </form>
-      </div>
+          {!form.formState.isSubmitting && <span>Submit</span>}
+          {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
+        </Button>
+      </form>
     </div>
   );
 }
-
-export default PreStepForm;

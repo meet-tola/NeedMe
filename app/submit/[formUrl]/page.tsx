@@ -17,7 +17,6 @@ async function SubmitPage({
 
   const formContent = JSON.parse(form.content) as FormElementInstance[];
 
-  // Pass the form data and URL to the client component
   return <PreStepForm formUrl={params.formUrl} content={formContent} />;
 }
 

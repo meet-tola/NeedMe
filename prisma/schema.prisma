@@ -63,14 +63,16 @@ model FormSubmissions {
 }
 
 model UserDetails {
-  id        Int      @id @default(autoincrement())
-  formId    Int
-  name      String
-  email     String
-  phone     String
-  createdAt DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  formShareURL String   @unique
+  name         String
+  email        String
+  phone        String
+  createdAt    DateTime @default(now())
+  status       String   @default("pending")
 
-  form Form @relation(fields: [formId], references: [id])
+  businessId Int?
+  form       Form @relation(fields: [formShareURL], references: [shareURL])
 
-  @@index([formId])
+  @@index([formShareURL])
 }

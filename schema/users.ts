@@ -5,8 +5,8 @@ export const userSchema = z.object({
     email: z.string().email("Invalid email address"),
     phone: z
       .string()
-      .regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
-    formId: z.string().url("Invalid URL format"),
+      .regex(/^\d{11}$/, "Phone number must be exactly 10 digits"),
+      formShareURL: z.string().min(1, "Invalid formId"),
   });
   
   export type UserSchemaType = z.infer<typeof userSchema>;
