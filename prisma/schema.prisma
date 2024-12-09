@@ -43,6 +43,7 @@ model Form {
 
   totalAppointments Int @default(0)
   submissions       Int @default(0)
+  visitCount        Int?
 
   shareURL        String            @unique @default(uuid())
   FormSubmissions FormSubmissions[]
@@ -64,7 +65,7 @@ model FormSubmissions {
 
 model UserDetails {
   id           Int      @id @default(autoincrement())
-  formShareURL String   @unique
+  formShareURL String   
   name         String
   email        String
   phone        String

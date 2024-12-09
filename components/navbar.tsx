@@ -16,7 +16,7 @@ import Logo from "./Logo";
 
 export function Navbar() {
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 transition-colors duration-200">
+    <nav className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -56,7 +56,13 @@ export function Navbar() {
               href="#"
               className="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
             >
-              Settings
+              Notification
+            </Link>
+            <Link
+              href="#"
+              className="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+            >
+              Pricing
             </Link>
           </div>
           <div className="flex items-center gap-4">

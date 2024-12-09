@@ -92,3 +92,22 @@ export async function CancelAppointment(formShareURL: string, id: number) {
         data: { status: "canceled" },
       });
 }
+
+export async function DeleteUserDetails(formShareURL: string, id: number) {
+    const user = await currentUser();
+    if (!user) {
+        throw new Error("User not authenticated");
+    }
+
+    const form = await prisma.form.findUnique({
+        where: { shareURL: formShareURL, userId: user.id },
+    });
+
+    if (!form) {
+        throw new Error("Form not found or unauthorized access");
+    }
+
+    return await prisma.userDetails.delete({
+        where: { id },
+    });
+}

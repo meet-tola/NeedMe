@@ -7,48 +7,116 @@ import { GetBusinessId } from "./business";
 
 class UserNotFoundErr extends Error { }
 
-export async function GetFormStats() {
+export async function GetFormStats(formId?: number) {
   try {
     const user = await currentUser();
     if (!user) {
       throw new UserNotFoundErr("User not found");
     }
 
-    // Fetch all forms for the user
-    const forms = await prisma.form.findMany({
+    // Fetch the business ID for the current user
+    const businessId = await GetBusinessId();
+    if (!businessId) {
+      throw new Error("Business ID not found for the current user");
+    }
+
+    // Count all scheduled, pending, and cancelled appointments for the business
+    const allScheduledAppointments = await prisma.userDetails.count({
+      where: {
+        businessId,
+        status: "schedule",
+      },
+    });
+
+    const allPendingAppointments = await prisma.userDetails.count({
+      where: {
+        businessId,
+        status: "pending",
+      },
+    });
+
+    const allCancelledAppointments = await prisma.userDetails.count({
+      where: {
+        businessId,
+        status: "cancelled",
+      },
+    });
+
+    // Placeholder for form-specific stats
+    let scheduledAppointments = 0;
+    let pendingAppointments = 0;
+    let cancelledAppointments = 0;
+    let formVisitCount = 0;
+
+    if (formId) {
+      // Fetch the form's shareURL to filter userDetails
+      const form = await prisma.form.findUnique({
+        where: {
+          id: formId,
+          userId: user.id,
+        },
+        select: {
+          shareURL: true,
+          visitCount: true,
+        },
+      });
+
+      if (form) {
+        // Count scheduled, pending, and cancelled appointments for the specific form
+        scheduledAppointments = await prisma.userDetails.count({
+          where: {
+            formShareURL: form.shareURL,
+            status: "scheduled",
+          },
+        });
+
+        pendingAppointments = await prisma.userDetails.count({
+          where: {
+            formShareURL: form.shareURL,
+            status: "pending",
+          },
+        });
+
+        cancelledAppointments = await prisma.userDetails.count({
+          where: {
+            formShareURL: form.shareURL,
+            status: "cancelled",
+          },
+        });
+
+        formVisitCount = form.visitCount || 0;
+      }
+    }
+
+    // Count the total number of published forms for the user
+    const publishedFormsCount = await prisma.form.count({
       where: {
         userId: user.id,
-      },
-      select: {
-        totalAppointments: true,
-        submissions: true,
+        published: true,
       },
     });
-
-    // Calculate the total appointments and submissions
-    let totalAppointments = 0;
-    let submissions = 0;
-
-    forms.forEach(form => {
-      totalAppointments += form.totalAppointments || 0;
-      submissions += form.submissions || 0;
-    });
-
-    // Calculate the total divided by 10
-    const submissionsRate = (totalAppointments + submissions) / 10;
-    const bounceRate = (totalAppointments + submissions) / 20;
 
     return {
-      totalAppointments,
-      submissions,
-      submissionsRate,
-      bounceRate
+      // All forms stats
+      allScheduledAppointments,
+      allPendingAppointments,
+      allCancelledAppointments,
+
+      // Specific form stats (0 if formId is not provided)
+      scheduledAppointments,
+      pendingAppointments,
+      cancelledAppointments,
+      formVisitCount,
+
+      // General stats
+      publishedFormsCount,
     };
   } catch (error) {
     console.error("Error in GetFormStats:", error);
     throw error;
   }
 }
+
 export async function CreateForm(data: formSchemaType) {
   const validation = formSchema.safeParse(data);
   if (!validation.success) {
@@ -219,4 +287,75 @@ export async function GetFormWithSubmissions(id: number) {
       FormSubmissions: true,
     },
   });
+}
+
+export async function GetFormWithSubmissionByUserDetails(userDetailsId: number) {
+  const user = await currentUser();
+  if (!user) {
+    throw new UserNotFoundErr();
+  }
+
+  const userDetails = await prisma.userDetails.findUnique({
+    where: {
+      id: userDetailsId,
+    },
+    select: {
+      formShareURL: true,
+    },
+  });
+
+  if (!userDetails || !userDetails.formShareURL) {
+    throw new Error("User details not found or formShareURL missing.");
+  }
+
+  // Fetch the form using the formShareURL
+  const form = await prisma.form.findUnique({
+    where: {
+      shareURL: userDetails.formShareURL,
+      userId: user.id, // Ensure the authenticated user owns the form
+    },
+    include: {
+      FormSubmissions: true, // Include form submissions
+    },
+  });
+
+  if (!form) {
+    throw new Error("Form not found or unauthorized access.");
+  }
+
+  return form;
+}
+
+
+export async function DeleteFormById(id: number) {
+  const user = await currentUser();
+  if (!user) {
+    throw new UserNotFoundErr();
+  }
+
+  try {
+    // Check if the form exists and belongs to the current user
+    const form = await prisma.form.findUnique({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
+
+    if (!form) {
+      throw new Error("Form not found or does not belong to the current user.");
+    }
+
+    // Delete the form
+    await prisma.form.delete({
+      where: {
+        id,
+      },
+    });
+
+    return { success: true, message: "Form deleted successfully." };
+  } catch (error) {
+    console.error("Error in DeleteFormById:", error);
+    throw error;
+  }
 }

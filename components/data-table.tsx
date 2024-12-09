@@ -22,6 +22,7 @@ import { ScheduleAppointmentBtn } from "./schedule-appointment-btn";
 import { CancelAppointmentBtn } from "./cancel-appointment-btn";
 import { MoreHorizontal } from "lucide-react";
 import { GetUserDetails } from "@/actions/user";
+import { Skeleton } from "./ui/skeleton";
 
 export function DataTable({ shareURL }: { shareURL: string }) {
   const [viewFormOpen, setViewFormOpen] = useState(false);
@@ -94,7 +95,7 @@ export function DataTable({ shareURL }: { shareURL: string }) {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <SkeletonLoader />;
   if (error) return <div>{error}</div>;
 
   return (
@@ -111,62 +112,70 @@ export function DataTable({ shareURL }: { shareURL: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell className="font-medium">{row.name}</TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>
-                  {new Date(row.createdAt).toLocaleDateString()}
-                </TableCell>
-                <TableCell>{getStatusBadge(row.status)}</TableCell>
-                <TableCell>
-                  <div className="flex items-center space-x-2">
-                    {row.status === "canceled" ? (
-                      <Button
-                        size="sm"
-                        onClick={() => handleAction("schedule", row.id)}
-                      >
-                        Reschedule
-                      </Button>
-                    ) : (
-                      <Button
-                        size="sm"
-                        onClick={() => handleAction("schedule", row.id)}
-                      >
-                        Schedule
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleAction("cancel", row.id)}
-                    >
-                      Cancel
-                    </Button>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
+            {data.length > 0 ? (
+              data.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell className="font-medium">{row.name}</TableCell>
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>
+                    {new Date(row.createdAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>{getStatusBadge(row.status)}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      {row.status === "canceled" ? (
+                        <Button
+                          size="sm"
+                          onClick={() => handleAction("schedule", row.id)}
+                        >
+                          Reschedule
                         </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() => handleAction("view", row.id)}
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={() => handleAction("schedule", row.id)}
                         >
-                          View form details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleAction("delete", row.id)}
-                        >
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+                          Schedule
+                        </Button>
+                      )}
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleAction("cancel", row.id)}
+                      >
+                        Cancel
+                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => handleAction("view", row.id)}
+                          >
+                            View form details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleAction("delete", row.id)}
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} rowSpan={5} className="text-center text-gray-500">
+                  No data now
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
@@ -190,4 +199,34 @@ export function DataTable({ shareURL }: { shareURL: string }) {
       />
     </>
   );
+}
+
+
+function SkeletonLoader() {
+  return (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Customer</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {[...Array(5)].map((_, i) => (
+            <TableRow key={i}>
+              <TableCell><Skeleton className="h-4 w-[100px]" /></TableCell>
+              <TableCell><Skeleton className="h-4 w-[150px]" /></TableCell>
+              <TableCell><Skeleton className="h-4 w-[80px]" /></TableCell>
+              <TableCell><Skeleton className="h-4 w-[60px]" /></TableCell>
+              <TableCell><Skeleton className="h-8 w-[200px]" /></TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  )
 }

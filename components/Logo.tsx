@@ -15,7 +15,7 @@ export default function Logo() {
   }
 
   return (
-    <div className="h-8 w-auto">
+    <div className="h-6 w-auto">
       {theme === "dark" ? (
         <img src="/logo-dark.svg" alt="NeedMe Logo" className="h-full w-auto" />
       ) : (
