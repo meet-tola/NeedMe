@@ -4,10 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
@@ -25,7 +24,6 @@ import { toast } from "@/hooks/use-toast";
 import Logo from "@/components/Logo";
 
 export default function OnboardingPage() {
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -53,22 +51,9 @@ export default function OnboardingPage() {
     },
   });
 
-  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setLogoUrl(result);
-        form.setValue("logoUrl", result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const onSubmit = async (data: BusinessFormData) => {
     try {
-      const businessId = await CreateBusiness(data);
+      await CreateBusiness(data);
       toast({
         title: "Success",
         description: "Form created successfully",
@@ -86,7 +71,6 @@ export default function OnboardingPage() {
 
   return (
     <div className="flex min-h-screen">
-
       {/* Content */}
       <div className="flex-1 p-8 lg:p-12">
         <div className="max-w-2xl mx-auto">
@@ -96,7 +80,7 @@ export default function OnboardingPage() {
           </div>
 
           <h1 className="text-3xl font-bold mb-6">
-            Welcome! Let's set up your business
+            Welcome! Let&apos;s set up your business
           </h1>
 
           <Form {...form}>
