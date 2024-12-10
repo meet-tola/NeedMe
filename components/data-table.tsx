@@ -23,12 +23,14 @@ import { CancelAppointmentBtn } from "./cancel-appointment-btn";
 import { MoreHorizontal } from "lucide-react";
 import { GetUserDetails } from "@/actions/user";
 import { Skeleton } from "./ui/skeleton";
+import { DeleteAppointmentBtn } from "./delete-appointment-btn";
 
 export function DataTable({ shareURL }: { shareURL: string }) {
   const [viewFormOpen, setViewFormOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +51,7 @@ export function DataTable({ shareURL }: { shareURL: string }) {
     fetchData();
   }, [shareURL]);
 
-  const handleAction = (action: string, id: number) => {
+  const handleAction = async (action: string, id: number) => {
     setSelectedId(id);
     switch (action) {
       case "view":
@@ -62,7 +64,7 @@ export function DataTable({ shareURL }: { shareURL: string }) {
         setCancelOpen(true);
         break;
       case "delete":
-        console.log("Delete", id);
+        setDeleteOpen(true);
         break;
     }
   };
@@ -131,20 +133,22 @@ export function DataTable({ shareURL }: { shareURL: string }) {
                           Reschedule
                         </Button>
                       ) : (
-                        <Button
-                          size="sm"
-                          onClick={() => handleAction("schedule", row.id)}
-                        >
-                          Schedule
-                        </Button>
+                        <>
+                          <Button
+                            size="sm"
+                            onClick={() => handleAction("schedule", row.id)}
+                          >
+                            Schedule
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleAction("cancel", row.id)}
+                          >
+                            Cancel
+                          </Button>
+                        </>
                       )}
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => handleAction("cancel", row.id)}
-                      >
-                        Cancel
-                      </Button>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -171,7 +175,11 @@ export function DataTable({ shareURL }: { shareURL: string }) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} rowSpan={5} className="text-center text-gray-500">
+                <TableCell
+                  colSpan={5}
+                  rowSpan={5}
+                  className="text-center text-gray-500"
+                >
                   No data now
                 </TableCell>
               </TableRow>
@@ -179,6 +187,18 @@ export function DataTable({ shareURL }: { shareURL: string }) {
           </TableBody>
         </Table>
       </div>
+
+      <DeleteAppointmentBtn
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        id={selectedId}
+        shareURL={shareURL}
+        onDeleteSuccess={() => {
+          setData((prevData) =>
+            prevData.filter((row) => row.id !== selectedId)
+          );
+        }}
+      />
 
       <ViewFormBtn
         open={viewFormOpen}
@@ -201,7 +221,6 @@ export function DataTable({ shareURL }: { shareURL: string }) {
   );
 }
 
-
 function SkeletonLoader() {
   return (
     <div className="rounded-md border">
@@ -218,15 +237,25 @@ function SkeletonLoader() {
         <TableBody>
           {[...Array(5)].map((_, i) => (
             <TableRow key={i}>
-              <TableCell><Skeleton className="h-4 w-[100px]" /></TableCell>
-              <TableCell><Skeleton className="h-4 w-[150px]" /></TableCell>
-              <TableCell><Skeleton className="h-4 w-[80px]" /></TableCell>
-              <TableCell><Skeleton className="h-4 w-[60px]" /></TableCell>
-              <TableCell><Skeleton className="h-8 w-[200px]" /></TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-[100px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-[150px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-[80px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-[60px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-8 w-[200px]" />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }

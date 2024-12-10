@@ -25,7 +25,6 @@ export function ViewFormBtn({ open, onOpenChange, id }: ViewFormDialogProps) {
         setLoading(true);
         try {
           const fetchedForm = await GetFormWithSubmissionByUserDetails(id);
-          console.log("Data", fetchedForm);
           setForm(fetchedForm);
         } catch (error) {
           console.error("Failed to fetch form:", error);

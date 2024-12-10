@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { userSchema, UserSchemaType } from "@/schema/users";
 
-export async function UserDetails(data: UserSchemaType) {
+export async function CreateUserDetails(data: UserSchemaType) {
     const validation = userSchema.safeParse(data);
     if (!validation.success) {
         throw new Error("Form not valid");
@@ -15,14 +15,15 @@ export async function UserDetails(data: UserSchemaType) {
         where: {
             shareURL: formShareURL,
             published: true,
-          },
+        },
     });
 
     if (!form) {
         throw new Error("Form not found or unauthorized access");
     }
 
-    return await prisma.userDetails.create({
+    // Return the created UserDetails entry, including its id
+    const userDetails = await prisma.userDetails.create({
         data: {
             formShareURL,
             name,
@@ -31,7 +32,10 @@ export async function UserDetails(data: UserSchemaType) {
             status: "pending",
         },
     });
+
+    return userDetails;
 }
+
 
 export async function GetUserDetails(formShareURL: string) {
     const user = await currentUser();
@@ -70,7 +74,7 @@ export async function ScheduleAppointment(formShareURL: string, id: number) {
     return await prisma.userDetails.update({
         where: { id },
         data: { status: "approved" },
-      });
+    });
 }
 
 export async function CancelAppointment(formShareURL: string, id: number) {
@@ -90,7 +94,7 @@ export async function CancelAppointment(formShareURL: string, id: number) {
     return await prisma.userDetails.update({
         where: { id },
         data: { status: "canceled" },
-      });
+    });
 }
 
 export async function DeleteUserDetails(formShareURL: string, id: number) {
@@ -99,13 +103,17 @@ export async function DeleteUserDetails(formShareURL: string, id: number) {
         throw new Error("User not authenticated");
     }
 
-    const form = await prisma.form.findUnique({
+    const form = await prisma.form.findFirst({
         where: { shareURL: formShareURL, userId: user.id },
     });
 
     if (!form) {
         throw new Error("Form not found or unauthorized access");
     }
+
+    await prisma.formSubmissions.deleteMany({
+        where: { userDetailsId: id },
+    });
 
     return await prisma.userDetails.delete({
         where: { id },

@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScheduleAppointment } from "@/actions/user";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface ScheduleDialogProps {
   open: boolean;
@@ -26,22 +27,31 @@ export function ScheduleAppointmentBtn({
   id,
 }: ScheduleDialogProps) {
   const [additionalMessage, setAdditionalMessage] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleProceed = async () => {
-    setLoading(false);
+    setLoading(true);
     if (id === null) {
       console.error("ID cannot be null.");
       return;
     }
     try {
       await ScheduleAppointment(shareURL, id);
+      toast({
+        title: "Appointment Scheduled",
+        description: "The Appointment has been successfully scheduled.",
+      });
       window.location.reload()
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Error",
+        description: "Failed to schedule the appointment. Please try again later.",
+        variant: "destructive",
+      });
     } finally {
-      setLoading(true);
+      setLoading(false);
       console.log("Additional message:", additionalMessage);
       onOpenChange(false);
     }

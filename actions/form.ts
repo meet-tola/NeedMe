@@ -230,7 +230,11 @@ export async function GetFormContentByUrl(formUrl: string) {
   });
 }
 
-export async function SubmitForm(formUrl: string, content: string) {
+export async function SubmitForm(
+  formUrl: string,
+  content: string,
+  userDetailsId: number
+) {
   return await prisma.$transaction(async (prisma) => {
     const updatedForm = await prisma.form.update({
       data: {
@@ -240,6 +244,7 @@ export async function SubmitForm(formUrl: string, content: string) {
         FormSubmissions: {
           create: {
             content,
+            userDetailsId,
           },
         },
       },
@@ -261,7 +266,7 @@ export async function SubmitForm(formUrl: string, content: string) {
 
     await prisma.userDetails.update({
       where: {
-        formShareURL: formUrl,
+        id: userDetailsId,
       },
       data: {
         businessId,
@@ -271,6 +276,7 @@ export async function SubmitForm(formUrl: string, content: string) {
     return updatedForm;
   });
 }
+
 
 export async function GetFormWithSubmissions(id: number) {
   const user = await currentUser();
@@ -308,14 +314,17 @@ export async function GetFormWithSubmissionByUserDetails(userDetailsId: number) 
     throw new Error("User details not found or formShareURL missing.");
   }
 
-  // Fetch the form using the formShareURL
-  const form = await prisma.form.findUnique({
+  const form = await prisma.form.findFirst({
     where: {
       shareURL: userDetails.formShareURL,
-      userId: user.id, // Ensure the authenticated user owns the form
+      userId: user.id
     },
     include: {
-      FormSubmissions: true, // Include form submissions
+      FormSubmissions: {
+        where: {
+          userDetailsId,
+        },
+      },
     },
   });
 

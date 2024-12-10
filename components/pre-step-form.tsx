@@ -7,7 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { UserSchemaType, userSchema } from "@/schema/users";
-import { UserDetails } from "@/actions/user";
+import { CreateUserDetails } from "@/actions/user";
 import FormSubmitComponent from "@/components/form-submit-component";
 import { FormElementInstance } from "./builders/form-element";
 
@@ -19,6 +19,7 @@ export default function PreStepForm({
   content: FormElementInstance[];
 }) {
   const [preStepCompleted, setPreStepCompleted] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null); 
 
   const form = useForm<UserSchemaType>({
     resolver: zodResolver(userSchema),
@@ -33,17 +34,17 @@ export default function PreStepForm({
   useEffect(() => {
     form.setValue("formShareURL", formUrl);
   }, [formUrl, form]);
-  
 
   async function onSubmit(values: UserSchemaType) {
     try {
-      await UserDetails(values); 
+      const userDetails = await CreateUserDetails(values); 
+      setUserId(userDetails.id);
       toast({
         title: "Success",
         description: "Form submitted successfully",
       });
-      
-      setPreStepCompleted(true);
+
+      setPreStepCompleted(true); 
     } catch (error) {
       toast({
         title: "Error",
@@ -54,7 +55,13 @@ export default function PreStepForm({
   }
 
   if (preStepCompleted) {
-    return <FormSubmitComponent formUrl={formUrl} content={content} />;
+    return (
+      <FormSubmitComponent
+        formUrl={formUrl}
+        content={content}
+        userDetailsId={userId} 
+      />
+    );
   }
 
   return (

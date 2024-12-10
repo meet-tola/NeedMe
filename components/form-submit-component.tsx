@@ -10,10 +10,12 @@ import { Loader2, MousePointerClick } from "lucide-react";
 function FormSubmitComponent({
   formUrl,
   content,
+  userDetailsId, // Accept userId as a prop
 }: {
   content: FormElementInstance[];
   formUrl: string;
-}) {  
+  userDetailsId: number; // userId is required
+}) {
   const formValues = useRef<{ [key: string]: string }>({});
   const formErrors = useRef<{ [key: string]: boolean }>({});
   const [renderKey, setRenderKey] = useState(new Date().getTime());
@@ -49,7 +51,7 @@ function FormSubmitComponent({
       setRenderKey(new Date().getTime());
       toast({
         title: "Error",
-        description: "please check the form for errors",
+        description: "Please check the form for errors",
         variant: "destructive",
       });
       return;
@@ -57,7 +59,9 @@ function FormSubmitComponent({
 
     try {
       const jsonContent = JSON.stringify(formValues.current);
-      await SubmitForm(formUrl, jsonContent);
+      
+      // Pass userId to SubmitForm
+      await SubmitForm(formUrl, jsonContent, userDetailsId);
       setSubmitted(true);
     } catch (error) {
       toast({

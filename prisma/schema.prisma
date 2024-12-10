@@ -41,8 +41,8 @@ model Form {
   availability        String?   @default("")
   content             String    @default("[]")
 
-  totalAppointments Int @default(0)
-  submissions       Int @default(0)
+  totalAppointments Int  @default(0)
+  submissions       Int  @default(0)
   visitCount        Int?
 
   shareURL        String            @unique @default(uuid())
@@ -56,16 +56,18 @@ model Form {
 }
 
 model FormSubmissions {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  formId    Int
-  form      Form     @relation(fields: [formId], references: [id])
-  content   String
+  id            Int         @id @default(autoincrement())
+  createdAt     DateTime    @default(now())
+  formId        Int
+  form          Form        @relation(fields: [formId], references: [id])
+  content       String
+  userDetails   UserDetails @relation(fields: [userDetailsId], references: [id])
+  userDetailsId Int
 }
 
 model UserDetails {
   id           Int      @id @default(autoincrement())
-  formShareURL String   
+  formShareURL String
   name         String
   email        String
   phone        String
@@ -74,6 +76,8 @@ model UserDetails {
 
   businessId Int?
   form       Form @relation(fields: [formShareURL], references: [shareURL])
+
+  submissions FormSubmissions[]
 
   @@index([formShareURL])
 }

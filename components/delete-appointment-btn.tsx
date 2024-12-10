@@ -1,4 +1,4 @@
-import { CancelAppointment } from "@/actions/user";
+import { DeleteUserDetails } from "@/actions/user";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,39 +13,43 @@ import { toast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
-interface CancelAlertDialogProps {
+interface DeleteAlertDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   id: number | null;
   shareURL: string;
+  onDeleteSuccess?: () => void; 
 }
 
-export function CancelAppointmentBtn({
+export function DeleteAppointmentBtn({
   open,
   onOpenChange,
   id,
   shareURL,
-}: CancelAlertDialogProps) {
+  onDeleteSuccess,
+}: DeleteAlertDialogProps) {
   const [loading, setLoading] = useState(false);
 
-  const handleCancel = async () => {
+  const handleDelete = async () => {
     setLoading(true);
     if (id === null) {
       console.error("ID cannot be null.");
       return;
     }
     try {
-      await CancelAppointment(shareURL, id);
+      await DeleteUserDetails(shareURL, id);
+      if (onDeleteSuccess) onDeleteSuccess(); 
       toast({
-        title: "Appointment Canceled",
-        description: "The Appointment has been successfully canceled.",
+        title: "Deleted",
+        description: "The appointment has been successfully deleted.",
       });
-      window.location.reload()
+
+      // window.location.reload();
     } catch (error) {
-      console.error(error);
+      console.error("Failed to delete the record:", error);
       toast({
         title: "Error",
-        description: "Failed to cancel the appointment. Please try again later.",
+        description: "Failed to delete the appointment. Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -58,23 +62,24 @@ export function CancelAppointmentBtn({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
+          <AlertDialogTitle>
+            Are you sure you want to delete this record?
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently cancel the
-            appointment.
+            This action cannot be undone. The record will be permanently
+            deleted.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>No, go back</AlertDialogCancel>
-          <AlertDialogAction onClick={handleCancel}>
-          {loading ? (
+          <AlertDialogAction onClick={handleDelete}>
+            {loading ? (
               <div className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" /> Canceling...
+                <Loader2 className="h-4 w-4 animate-spin" /> Deleting...
               </div>
             ) : (
-              "Yes, cancel"
+              "Yes, delete"
             )}
-            
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
