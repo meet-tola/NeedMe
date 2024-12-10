@@ -21,7 +21,7 @@ import FormCard from "./form-card";
 export default function DashboardContent() {
   return (
     <div className="container pt-4">
-      <Suspense fallback={<StatsCards loading={true} />}>
+      <Suspense fallback={<StatsCards loading={true} data={undefined} />}>
         <CardStatsWrapper />
       </Suspense>
       <h2 className="text-2xl font-bold col-span-2 mt-4">
@@ -44,7 +44,7 @@ async function CardStatsWrapper() {
 }
 
 interface StatsCardProps {
-  data: Awaited<ReturnType<typeof GetFormStats>>;
+  data?: Awaited<ReturnType<typeof GetFormStats>>;
   loading: boolean;
 }
 function StatsCards(props: StatsCardProps) {
