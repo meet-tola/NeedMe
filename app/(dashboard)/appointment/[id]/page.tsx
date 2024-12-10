@@ -7,13 +7,13 @@ import { StatsCard } from "@/components/dashboard-content";
 import { AlertCircle, CalendarDays, CheckCircle, Clock } from "lucide-react";
 import { DataTable } from "@/components/data-table";
 
-async function FormDetailPage({
-  params,
-}: {
+interface FormDetailPageProps {
   params: {
     id: string;
   };
-}) {
+}
+
+async function FormDetailPage({ params }: FormDetailPageProps) {
   const { id } = params;
   const form = await GetFormById(Number(id));
   const stats = await GetFormStats(Number(id));
