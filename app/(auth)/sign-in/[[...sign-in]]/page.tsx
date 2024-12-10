@@ -1,11 +1,15 @@
-import { SignIn } from "@clerk/nextjs";
+"use client";
+import { SignIn } from '@clerk/nextjs'
 import Image from "next/image";
-
+import { useTheme } from 'next-themes';
 
 export default function Page() {
+  const { theme } = useTheme(); 
+
   return (
     <div className="flex min-h-screen">
-      <div className="flex-1 p-8 lg:p-12 items-center justify-center">
+      {/* Centered SignIn Component */}
+      <div className="flex-1 flex items-center justify-center">
         <div className="max-w-4xl mx-auto">
           <SignIn />
         </div>
@@ -14,7 +18,7 @@ export default function Page() {
       {/* Banner Image */}
       <div className="hidden lg:block lg:w-[28%] relative">
         <Image
-          src="https://via.placeholder.com/500"
+          src={theme === 'dark' ? '/onboarding.png' : '/onboarding2.png'} 
           alt="Onboarding Banner"
           layout="fill"
           objectFit="cover"

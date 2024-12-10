@@ -22,9 +22,11 @@ import { CreateBusiness, GetBusinessId } from "@/actions/business";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import Logo from "@/components/Logo";
+import { useTheme } from "next-themes";
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { theme } = useTheme();
 
   useEffect(() => {
     async function checkBusiness() {
@@ -208,7 +210,7 @@ export default function OnboardingPage() {
       {/* Banner Image */}
       <div className="hidden lg:block lg:w-[28%] relative">
         <Image
-          src="https://via.placeholder.com/500"
+          src={theme === "dark" ? "/onboarding.png" : "/onboarding2.png"}
           alt="Onboarding Banner"
           layout="fill"
           objectFit="cover"
