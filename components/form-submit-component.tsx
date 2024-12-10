@@ -10,11 +10,11 @@ import { Loader2, MousePointerClick } from "lucide-react";
 function FormSubmitComponent({
   formUrl,
   content,
-  userDetailsId, // Accept userId as a prop
+  userDetailsId,
 }: {
   content: FormElementInstance[];
   formUrl: string;
-  userDetailsId: number; // userId is required
+  userDetailsId: number; 
 }) {
   const formValues = useRef<{ [key: string]: string }>({});
   const formErrors = useRef<{ [key: string]: boolean }>({});

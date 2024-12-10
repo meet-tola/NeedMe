@@ -51,6 +51,7 @@ model Form {
   businessId  Int
   business    Business      @relation(fields: [businessId], references: [id])
   UserDetails UserDetails[]
+  notification Notification[]
 
   @@unique([name, userId])
 }
@@ -80,4 +81,17 @@ model UserDetails {
   submissions FormSubmissions[]
 
   @@index([formShareURL])
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String?  
+  businessId  Int?     
+  content     String   
+  isRead      Boolean  @default(false) 
+
+  formId      Int?     
+  form        Form?    @relation(fields: [formId], references: [id])
 }

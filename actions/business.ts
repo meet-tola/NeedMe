@@ -81,3 +81,48 @@ export async function GetBusinessByUserId() {
     }
 }
 
+export async function UpdateBusiness(data: BusinessFormData) {
+    const validation = businessSchema.safeParse(data);
+    if (!validation.success) {
+        throw new Error("Invalid form data");
+    }
+
+    const user = await currentUser();
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    const { name, description, contactInfo, address, operatingHours, logoUrl } = data;
+
+    try {
+        // Find the user's business
+        const existingBusiness = await prisma.business.findFirst({
+            where: {
+                userId: user.id,
+            },
+        });
+
+        if (!existingBusiness) {
+            throw new Error("No business profile found for the user");
+        }
+
+        // Update the business
+        const updatedBusiness = await prisma.business.update({
+            where: {
+                id: existingBusiness.id,
+            },
+            data: {
+                name,
+                description,
+                contactInfo,
+                address,
+                operatingHours,
+                logoURL: logoUrl || null,
+            },
+        });
+
+        return updatedBusiness;
+    } catch (error) {
+        throw new Error("Failed to update business profile");
+    }
+}

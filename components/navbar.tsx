@@ -13,6 +13,7 @@ import {
 import { UserButton } from "@clerk/nextjs";
 import { ThemeToggle } from "./ThemeToggle";
 import Logo from "./Logo";
+import { NotificationDropdown } from "./notification-dropdown";
 
 export function Navbar() {
   return (
@@ -124,53 +125,53 @@ export function MobileMenu() {
   );
 }
 
-export function NotificationDropdown() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative text-gray-500 dark:text-gray-400"
-        >
-          <Bell className="h-5 w-5" />
-          <span className="sr-only">View notifications</span>
-          <div className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></div>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
-        <DropdownMenuItem>
-          <div className="flex items-start space-x-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-            <div className="flex flex-col">
-              <span className="font-medium dark:text-white">
-                New Appointment
-              </span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                You have a new appointment scheduled for tomorrow at 2 PM.
-              </span>
-            </div>
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <div className="flex items-start space-x-2">
-            <div className="w-2 h-2 bg-transparent rounded-full mt-2"></div>
-            <div className="flex flex-col">
-              <span className="font-medium dark:text-white">
-                Approve Appointment
-              </span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                John Doe requested an appointment for next week. Please approve.
-              </span>
-            </div>
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Button variant="ghost" className="w-full justify-center">
-            View all notifications
-          </Button>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
+// export function NotificationDropdown() {
+//   return (
+//     <DropdownMenu>
+//       <DropdownMenuTrigger asChild>
+//         <Button
+//           variant="ghost"
+//           size="icon"
+//           className="relative text-gray-500 dark:text-gray-400"
+//         >
+//           <Bell className="h-5 w-5" />
+//           <span className="sr-only">View notifications</span>
+//           <div className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></div>
+//         </Button>
+//       </DropdownMenuTrigger>
+//       <DropdownMenuContent align="end" className="w-80">
+//         <DropdownMenuItem>
+//           <div className="flex items-start space-x-2">
+//             <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+//             <div className="flex flex-col">
+//               <span className="font-medium dark:text-white">
+//                 New Appointment
+//               </span>
+//               <span className="text-sm text-gray-500 dark:text-gray-400">
+//                 You have a new appointment scheduled for tomorrow at 2 PM.
+//               </span>
+//             </div>
+//           </div>
+//         </DropdownMenuItem>
+//         <DropdownMenuItem>
+//           <div className="flex items-start space-x-2">
+//             <div className="w-2 h-2 bg-transparent rounded-full mt-2"></div>
+//             <div className="flex flex-col">
+//               <span className="font-medium dark:text-white">
+//                 Approve Appointment
+//               </span>
+//               <span className="text-sm text-gray-500 dark:text-gray-400">
+//                 John Doe requested an appointment for next week. Please approve.
+//               </span>
+//             </div>
+//           </div>
+//         </DropdownMenuItem>
+//         <DropdownMenuItem>
+//           <Button variant="ghost" className="w-full justify-center">
+//             View all notifications
+//           </Button>
+//         </DropdownMenuItem>
+//       </DropdownMenuContent>
+//     </DropdownMenu>
+//   );
+// }

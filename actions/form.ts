@@ -273,6 +273,22 @@ export async function SubmitForm(
       },
     });
 
+    // Get user details to enhance notification content
+    const userDetails = await prisma.userDetails.findUnique({
+      where: { id: userDetailsId },
+      select: { name: true },
+    });
+
+    const userName = userDetails?.name || "Anonymous User";
+
+    await prisma.notification.create({
+      data: {
+        businessId,
+        content: `You have a new appointment from ${userName} for the form "${updatedForm.name}".`,
+        formId: updatedForm.id,
+      },
+    });
+
     return updatedForm;
   });
 }
