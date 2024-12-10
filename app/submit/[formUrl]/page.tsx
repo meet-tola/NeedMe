@@ -5,11 +5,11 @@ import PreStepForm from "@/components/pre-step-form";
 async function SubmitPage({
   params,
 }: {
-  params: {
-    formUrl: string;
-  };
+  params: Promise<{ formUrl: string }>;
 }) {
-  const form = await GetFormContentByUrl(params.formUrl);
+  const resolvedParams = await params;
+  const { formUrl } = resolvedParams;
+  const form = await GetFormContentByUrl(formUrl);
 
   if (!form) {
     throw new Error("Form not found");
@@ -17,7 +17,7 @@ async function SubmitPage({
 
   const formContent = JSON.parse(form.content) as FormElementInstance[];
 
-  return <PreStepForm formUrl={params.formUrl} content={formContent} />;
+  return <PreStepForm formUrl={formUrl} content={formContent} />;
 }
 
 export default SubmitPage;
