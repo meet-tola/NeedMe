@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { businessSchema, BusinessFormData } from "@/schema/business";
 import { currentUser } from "@clerk/nextjs/server";
 
-class UserNotFoundError extends Error {}
+class UserNotFoundError extends Error { }
 
 export async function CreateBusiness(data: BusinessFormData) {
     const validation = businessSchema.safeParse(data);
@@ -27,7 +27,7 @@ export async function CreateBusiness(data: BusinessFormData) {
             address,
             operatingHours,
             logoURL: logoUrl || null,
-            userId: user.id, 
+            userId: user.id,
         },
     });
 
@@ -47,7 +47,7 @@ export async function GetBusinessId() {
 
     const business = await prisma.business.findFirst({
         where: {
-            userId: user.id, 
+            userId: user.id,
         },
     });
 
@@ -67,7 +67,7 @@ export async function GetBusinessByUserId() {
     try {
         const business = await prisma.business.findFirst({
             where: {
-                userId: user.id, 
+                userId: user.id,
             },
         });
 
@@ -115,9 +115,9 @@ export async function UpdateBusiness(data: BusinessFormData) {
                 name,
                 description,
                 contactInfo,
-                address,
-                operatingHours,
-                logoURL: logoUrl || null,
+                address: address || existingBusiness.address,
+                operatingHours: operatingHours || existingBusiness.operatingHours,
+                logoURL: logoUrl || existingBusiness.logoURL,
             },
         });
 
