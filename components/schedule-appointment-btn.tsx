@@ -28,7 +28,6 @@ export function ScheduleAppointmentBtn({
 }: ScheduleDialogProps) {
   const [additionalMessage, setAdditionalMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleProceed = async () => {
     setLoading(true);

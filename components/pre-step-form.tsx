@@ -46,6 +46,7 @@ export default function PreStepForm({
 
       setPreStepCompleted(true); 
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
         description: "Something went wrong, please try again later",

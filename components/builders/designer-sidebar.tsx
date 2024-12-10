@@ -1,6 +1,4 @@
 import useDesigner from "@/hooks/useDesigner";
-import { FormElements } from "./form-element";
-import SideBtnElement from "./side-btn-Element";
 import FormElementsSidebar from "./form-elements-sidebar";
 import PropertiesFormSidebar from "./properties-form-sidebar";
 

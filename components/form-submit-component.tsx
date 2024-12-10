@@ -64,6 +64,7 @@ function FormSubmitComponent({
       await SubmitForm(formUrl, jsonContent, userDetailsId);
       setSubmitted(true);
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
         description: "Something went wrong",
