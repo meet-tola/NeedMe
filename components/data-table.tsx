@@ -86,10 +86,10 @@ export function DataTable({ shareURL }: { shareURL: string }) {
             Approved
           </Badge>
         );
-      case "canceled":
+      case "cancelled":
         return (
           <Badge variant="outline" className="bg-red-100 text-red-800">
-            Canceled
+            Cancelled
           </Badge>
         );
       default:
@@ -125,7 +125,7 @@ export function DataTable({ shareURL }: { shareURL: string }) {
                   <TableCell>{getStatusBadge(row.status)}</TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      {row.status === "canceled" ? (
+                      {row.status === "cancelled" ? (
                         <Button
                           size="sm"
                           onClick={() => handleAction("schedule", row.id)}

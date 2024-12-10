@@ -93,7 +93,7 @@ export async function CancelAppointment(formShareURL: string, id: number) {
 
     return await prisma.userDetails.update({
         where: { id },
-        data: { status: "canceled" },
+        data: { status: "cancelled" },
     });
 }
 
