@@ -4,15 +4,14 @@ import FormBuilder from "@/components/builders/form-builder";
 export default async function BuilderPage({
   params,
 }: {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
   const form = await GetFormById(Number(id));
 
   if (!form) {
     throw new Error("forms not found");
   }
-  return <FormBuilder form={form}/>;
+  return <FormBuilder form={form} />;
 }

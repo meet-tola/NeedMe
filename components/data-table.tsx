@@ -31,8 +31,7 @@ export function DataTable({ shareURL }: { shareURL: string }) {
   const [cancelOpen, setCancelOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

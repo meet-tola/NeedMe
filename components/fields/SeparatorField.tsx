@@ -25,7 +25,6 @@ export const SeparatorFieldFormElement: FormElement = {
   validate: () => true,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function DesignerComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
   return (
     <div className="flex flex-col gap-2 w-full">

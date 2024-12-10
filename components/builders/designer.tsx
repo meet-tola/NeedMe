@@ -20,8 +20,7 @@ import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
 
 export default function Designer() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { elements, addElement, selectedElement, setSelectedElement, removeElement } = useDesigner();
+    const { elements, addElement, selectedElement, setSelectedElement, removeElement } = useDesigner();
 
   const droppable = useDroppable({
     id: "designer-drop-area",
