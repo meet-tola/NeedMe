@@ -55,12 +55,12 @@ export default function PreStepForm({
     }
   }
 
-  if (preStepCompleted) {
+  if (preStepCompleted && userId !== null) {
     return (
       <FormSubmitComponent
         formUrl={formUrl}
         content={content}
-        userDetailsId={userId} 
+        userDetailsId={userId}
       />
     );
   }
