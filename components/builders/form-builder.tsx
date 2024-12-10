@@ -65,7 +65,7 @@ export default function FormBuilder({ form }: { form: Form }) {
     return (
       <>
         <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={1000} />
-        <div className="flex flex-col items-center justify-center h-full w-full mt-10">
+        <div className="flex flex-col items-center justify-center h-full w-full my-10">
           <div className="max-w-md">
             <h1 className="text-center text-4xl font-bold text-primary border-b pb-2 mb-10">
               🎊 Form Published 🎊
@@ -97,7 +97,7 @@ export default function FormBuilder({ form }: { form: Form }) {
                 </Link>
               </Button>
               <Button variant={"link"} asChild>
-                <Link href={`/forms/${form.id}`} className="gap-2">
+                <Link href={`/appointment/${form.id}`} className="gap-2">
                   Form details
                   <ArrowRight />
                 </Link>

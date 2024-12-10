@@ -17,13 +17,14 @@ export async function CreateBusiness(data: BusinessFormData) {
         throw new UserNotFoundError("User not found");
     }
 
-    const { name, description, contactInfo, address, operatingHours, logoUrl } = data;
+    const { name, description, email, phoneNumber, address, operatingHours, logoUrl } = data;
 
     const business = await prisma.business.create({
         data: {
             name,
             description,
-            contactInfo,
+            email,
+            phoneNumber,
             address,
             operatingHours,
             logoURL: logoUrl || null,
@@ -92,7 +93,7 @@ export async function UpdateBusiness(data: BusinessFormData) {
         throw new Error("User not found");
     }
 
-    const { name, description, contactInfo, address, operatingHours, logoUrl } = data;
+    const { name, description, email, phoneNumber, address, operatingHours, logoUrl } = data;
 
     try {
         // Find the user's business
@@ -114,7 +115,8 @@ export async function UpdateBusiness(data: BusinessFormData) {
             data: {
                 name,
                 description,
-                contactInfo,
+                email,
+                phoneNumber,
                 address: address || existingBusiness.address,
                 operatingHours: operatingHours || existingBusiness.operatingHours,
                 logoURL: logoUrl || existingBusiness.logoURL,

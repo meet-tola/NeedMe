@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +27,11 @@ import { useTheme } from "next-themes";
 export default function OnboardingPage() {
   const router = useRouter();
   const { theme } = useTheme();
+  const [imageSrc, setImageSrc] = useState("/onboarding.png");
+
+  useEffect(() => {
+    setImageSrc(theme === "dark" ? "/onboarding.png" : "/onboarding2.png");
+  }, [theme]);
 
   useEffect(() => {
     async function checkBusiness() {
@@ -47,7 +52,8 @@ export default function OnboardingPage() {
     defaultValues: {
       name: "",
       description: "",
-      contactInfo: "",
+      email: "",
+      phoneNumber: "",
       address: "",
       operatingHours: "",
     },
@@ -58,7 +64,7 @@ export default function OnboardingPage() {
       await CreateBusiness(data);
       toast({
         title: "Success",
-        description: "Form created successfully",
+        description: "Business created successfully",
       });
       router.push("/dashboard");
     } catch (error) {
@@ -143,19 +149,41 @@ export default function OnboardingPage() {
               />
 
               {/* Contact Info */}
-              <FormField
-                control={form.control}
-                name="contactInfo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Contact Information</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Phone, email, website" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              <div className="flex flex-col md:flex-row gap-6 md:gap-4 w-full">
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Phone Number */}
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your phone number"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               {/* Address */}
               <FormField
@@ -210,7 +238,7 @@ export default function OnboardingPage() {
       {/* Banner Image */}
       <div className="hidden lg:block lg:w-[28%] relative">
         <Image
-          src={theme === "dark" ? "/onboarding.png" : "/onboarding2.png"}
+          src={imageSrc}
           alt="Onboarding Banner"
           layout="fill"
           objectFit="cover"

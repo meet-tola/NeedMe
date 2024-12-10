@@ -18,7 +18,8 @@ model Business {
   name           String
   logoURL        String?
   description    String?
-  contactInfo    String
+  email          String
+  phoneNumber    String
   address        String?
   operatingHours String?
   // subdomain      String   @unique
@@ -48,9 +49,9 @@ model Form {
   shareURL        String            @unique @default(uuid())
   FormSubmissions FormSubmissions[]
 
-  businessId  Int
-  business    Business      @relation(fields: [businessId], references: [id])
-  UserDetails UserDetails[]
+  businessId   Int
+  business     Business       @relation(fields: [businessId], references: [id])
+  UserDetails  UserDetails[]
   notification Notification[]
 
   @@unique([name, userId])
@@ -84,14 +85,14 @@ model UserDetails {
 }
 
 model Notification {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId      String?  
-  businessId  Int?     
-  content     String   
-  isRead      Boolean  @default(false) 
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     String?
+  businessId Int?
+  content    String
+  isRead     Boolean  @default(false)
 
-  formId      Int?     
-  form        Form?    @relation(fields: [formId], references: [id])
+  formId Int?
+  form   Form? @relation(fields: [formId], references: [id])
 }
