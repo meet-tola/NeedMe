@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,11 +23,15 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import Logo from "@/components/Logo";
 import { useTheme } from "next-themes";
+import PageLoader from "@/components/page-loader";
+import { SignedIn, SignOutButton } from "@clerk/nextjs";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function OnboardingPage() {
   const router = useRouter();
   const { theme } = useTheme();
   const [imageSrc, setImageSrc] = useState("/onboarding.png");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setImageSrc(theme === "dark" ? "/onboarding.png" : "/onboarding2.png");
@@ -42,6 +46,8 @@ export default function OnboardingPage() {
         }
       } catch (error) {
         console.log("No business details found for user:", error);
+      } finally {
+        setLoading(false);
       }
     }
     checkBusiness();
@@ -77,14 +83,29 @@ export default function OnboardingPage() {
     }
   };
 
+  if (loading) {
+    return <PageLoader />;
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* Content */}
       <div className="flex-1 p-8 lg:p-12">
         <div className="max-w-2xl mx-auto">
-          {/* SaaS Logo */}
-          <div className="mb-8">
+          {/* SaaS Logo and Sign Out */}
+          <div className="mb-8 flex justify-between items-center">
             <Logo />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+
+              <SignedIn>
+                <SignOutButton>
+                  <Button variant="outline">
+                    <LogOut />
+                  </Button>
+                </SignOutButton>
+              </SignedIn>
+            </div>
           </div>
 
           <h1 className="text-3xl font-bold mb-6">
@@ -149,7 +170,6 @@ export default function OnboardingPage() {
               />
 
               {/* Contact Info */}
-
               <div className="flex flex-col md:flex-row gap-6 md:gap-4 w-full">
                 {/* Email */}
                 <FormField

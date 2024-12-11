@@ -116,7 +116,7 @@ export async function GetFormStats(formId?: number) {
     };
   } catch (error) {
     console.error("Error in GetFormStats:", error);
-    throw error;
+    return null;
   }
 }
 

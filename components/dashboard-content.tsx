@@ -21,7 +21,7 @@ import FormCard from "./form-card";
 export default function DashboardContent() {
   return (
     <div className="container pt-4">
-      <Suspense fallback={<StatsCards loading={true} data={undefined}/>}>
+      <Suspense fallback={<StatsCards loading={true} />}>
         <CardStatsWrapper />
       </Suspense>
       <h2 className="text-2xl font-bold col-span-2 mt-4">
