@@ -56,7 +56,7 @@ export default function Home() {
           <div className="container px-4 md:px-6 mt-12 md:mt-0">
             <div className="flex flex-col items-center space-y-4 text-center">
               <div className="justify-center flex">
-                <div className="flex flex-row items-center justify-center gap-2 md:gap-5 md:px-0 px-2 p-1 md:p-2 text-sm backdrop-blur-sm rounded-full bg-background/80 dark:bg-background/20 border border-border z-10">
+                <div className="flex flex-row items-center justify-center gap-2 md:gap-5 px-2 p-1 md:p-2 text-sm backdrop-blur-sm rounded-full bg-background/80 dark:bg-background/20 border border-border z-10">
                   <Badge
                     variant="secondary"
                     className="font-semibold rounded-full px-3 py-1"
