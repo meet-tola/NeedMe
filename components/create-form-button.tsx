@@ -62,9 +62,9 @@ export default function CreatFormBtn() {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create Form</DialogTitle>
+            <DialogTitle>Create Appointment Form</DialogTitle>
             <DialogDescription>
-              Create a new form to start collecting responses
+              Create a new form to start collecting responses.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>

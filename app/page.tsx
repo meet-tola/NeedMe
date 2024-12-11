@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { ReactNode, useRef } from "react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
+import { useTheme } from "next-themes";
 
 interface FeatureCardProps {
   icon: ReactNode;
@@ -40,6 +41,7 @@ interface RoadmapStepProps {
 
 export default function Home() {
   const { user, isSignedIn } = useUser();
+  const { theme } = useTheme();
 
   if (user) {
     return redirect("/onboarding");
@@ -122,9 +124,10 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
+
               <Image
-                src="/dashboard-preview.png"
-                alt="Talktrack Dashboard Preview"
+          src={theme === "dark" ? "/dashboard-dark.png" : "/dashboard.png"}
+          alt="Talktrack Dashboard Preview"
                 width={1920}
                 height={1080}
                 className="rounded-lg shadow-2xl"
