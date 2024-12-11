@@ -1,9 +1,7 @@
 "use client";
 
-import { SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { ArrowRightIcon, Calendar, Clock, CheckIcon, UserPlus, PenTool, Send } from 'lucide-react';
 import { redirect } from "next/navigation";
@@ -103,17 +101,17 @@ export default function Home() {
                 ) : (
                   <Link href="/sign-up">
                     <Button size="lg" className="w-full sm:w-auto">
-                      Book Now
+                      Get Started
                     </Button>
                   </Link>
                 )}
-                <Link href="/services">
+                <Link href={"#how-it-works"}>
                   <Button
                     variant="outline"
                     size="lg"
                     className="w-full sm:w-auto"
                   >
-                    View Services
+                    How it works
                   </Button>
                 </Link>
               </div>
@@ -145,7 +143,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/50">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/50" id="features">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center mb-12">
               Why Choose Talktrack?
@@ -176,7 +174,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full py-12 md:py-24 lg:py-32" id="how-it-works">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center mb-12">
               How It Works
@@ -210,7 +208,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full py-12 md:py-24 lg:py-32" id="pricing">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center mb-12">
               Pricing Plans
@@ -260,7 +258,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 bg-primary text-primary-foreground">
+        <section className="w-full py-12 md:py-24 bg-primary text-primary-foreground dark:bg-gradient-to-r dark:from-purple-700 dark:to-blue-900">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center text-center space-y-4">
               <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
@@ -276,7 +274,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t bg-background py-6 md:py-0">
-        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 md:h-16">
+        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 md:h-16 px-8">
           <p className="text-sm text-muted-foreground">
             &copy; 2024 Talktrack. All rights reserved.
           </p>

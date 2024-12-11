@@ -2,17 +2,13 @@
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { dark, neobrutalism } from "@clerk/themes";
+import { dark } from "@clerk/themes";
 
 export default function Page() {
   const { theme } = useTheme();
 
-  // Dynamically set Clerk appearance based on theme
   const signInAppearance = {
-    baseTheme: theme === "dark" ? dark : neobrutalism,
-    variables: {
-      colorPrimary: theme === "dark" ? "#fff" : "blue", 
-    },
+    baseTheme: theme === "dark" ? dark : undefined
   };
 
   return (

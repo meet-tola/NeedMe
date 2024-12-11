@@ -22,10 +22,8 @@ model Business {
   phoneNumber    String
   address        String?
   operatingHours String?
-  // subdomain      String   @unique
+  userId         String
   forms          Form[]
-
-  userId String
 }
 
 model Form {

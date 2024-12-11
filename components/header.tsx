@@ -13,9 +13,9 @@ import { redirect } from "next/navigation"
 
 const navItems = [
   { name: "Home", href: "/" },
-  { name: "Features", href: "/features" },
-  { name: "How it works", href: "/how-it-works" },
-  { name: "pricing", href: "/pricing" },
+  { name: "Features", href: "/#features" },
+  { name: "How it works", href: "/#how-it-works" },
+  { name: "pricing", href: "/#pricing" },
 ]
 
 export function Header() {
