@@ -4,6 +4,9 @@ import prisma from "@/lib/prisma";
 import { formSchema, formSchemaType } from "@/schema/form";
 import { currentUser } from "@clerk/nextjs/server";
 import { GetBusinessId } from "./business";
+import { render } from "@react-email/components";
+import AppointmentEmail from "@/components/email-template/appointment-email";
+import { sendEmailToBusiness } from "./email";
 
 class UserNotFoundErr extends Error { }
 
@@ -252,13 +255,26 @@ export async function SubmitForm(
         shareURL: formUrl,
         published: true,
       },
+      include: {
+        business: {
+          select: {
+            email: true,
+            name: true,
+          },
+        },
+      },
     });
 
     if (!updatedForm) {
       throw new Error("Form not found or not published.");
     }
 
-    const { businessId } = updatedForm;
+    const { business, name: formTitle, id: formId, businessId } = updatedForm;
+
+    if (!business?.email || !business.name) {
+      throw new Error("Business email or name not found.");
+    }
+
 
     if (!businessId) {
       throw new Error("Business ID not found in the form.");
@@ -281,6 +297,7 @@ export async function SubmitForm(
 
     const userName = userDetails?.name || "Anonymous User";
 
+
     await prisma.notification.create({
       data: {
         businessId,
@@ -289,8 +306,25 @@ export async function SubmitForm(
       },
     });
 
+    const emailContent = await render(
+      AppointmentEmail({
+        businessName: business.name,
+        userName,
+        formTitle,
+        submissionContent: content,
+        formId,
+      })
+    );
+
+    sendEmailToBusiness(
+      "Acme <onboarding@resend.dev>",
+      "wasiusikiru7@gmail.com",
+      `New Appointment Submission: ${formTitle}`,
+      emailContent
+    );
+
     return updatedForm;
-  });
+  }, { timeout: 10000 });
 }
 
 
@@ -384,3 +418,7 @@ export async function DeleteFormById(id: number) {
     throw error;
   }
 }
+function ResendEmail(arg0: string, email: string, arg2: string, emailContent: Promise<string>) {
+  throw new Error("Function not implemented.");
+}
+

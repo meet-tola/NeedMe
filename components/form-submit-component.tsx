@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import { SubmitForm } from "@/actions/form";
 import { Loader2, MousePointerClick } from "lucide-react";
+import { BusinessHeader } from "./business-header";
 
 function FormSubmitComponent({
   formUrl,
@@ -14,7 +15,7 @@ function FormSubmitComponent({
 }: {
   content: FormElementInstance[];
   formUrl: string;
-  userDetailsId: number; 
+  userDetailsId: number;
 }) {
   const formValues = useRef<{ [key: string]: string }>({});
   const formErrors = useRef<{ [key: string]: boolean }>({});
@@ -59,7 +60,7 @@ function FormSubmitComponent({
 
     try {
       const jsonContent = JSON.stringify(formValues.current);
-      
+
       // Pass userId to SubmitForm
       await SubmitForm(formUrl, jsonContent, userDetailsId);
       setSubmitted(true);
@@ -87,10 +88,10 @@ function FormSubmitComponent({
   }
 
   return (
-    <div className="flex justify-center w-full h-full items-center">
+    <div className="flex flex-col gap-10 justify-center w-full h-full items-center pt-8">
       <div
         key={renderKey}
-        className="max-w-[620px] flex flex-col gap-4 flex-grow bg-background w-full p-8 overflow-y-auto border shadow-xl shadow-blue-500 rounded-md"
+        className="max-w-[620px] flex flex-col gap-4 flex-grow bg-background w-full p-8 overflow-y-auto border shadow-xl shadow-blue-500 dark:shadow-blue-900 rounded-md"
       >
         {content.map((element) => {
           const FormElement = FormElements[element.type].formComponent;
@@ -120,6 +121,7 @@ function FormSubmitComponent({
           {pending && <Loader2 className="animate-spin" />}
         </Button>
       </div>
+      <BusinessHeader />
     </div>
   );
 }

@@ -4,12 +4,6 @@ import Link from "next/link";
 import { Bell, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { UserButton } from "@clerk/nextjs";
 import { ThemeToggle } from "./ThemeToggle";
 import Logo from "./Logo";
@@ -17,7 +11,7 @@ import { NotificationDropdown } from "./notification-dropdown";
 
 export function Navbar() {
   return (
-    <nav className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-colors duration-200">
+    <nav className="bg-background/80 dark:bg-background/80 backdrop-blur-sm shadow-sm sticky top-0 z-50 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
