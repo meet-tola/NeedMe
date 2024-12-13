@@ -139,14 +139,9 @@ const FormCards = React.lazy(async () => {
     default: () => {
       if (forms.length === 0) {
         return (
-          <>
-            {[1, 2, 3].map((el) => (
-              <Skeleton
-                key={el}
-                className="border-2 border-primary/20 h-[190px] w-full"
-              />
-            ))}
-          </>
+          <div className="col-span-full text-center text-muted-foreground">
+            No form yet
+          </div>
         );
       }
 
@@ -160,6 +155,7 @@ const FormCards = React.lazy(async () => {
     },
   };
 });
+
 
 
 

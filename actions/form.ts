@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { GetBusinessId } from "./business";
 import { render } from "@react-email/components";
 import AppointmentEmail from "@/components/email-template/appointment-email";
-import { sendEmailToBusiness } from "./email";
+import { sendEmail } from "./email";
 
 class UserNotFoundErr extends Error { }
 
@@ -316,15 +316,15 @@ export async function SubmitForm(
       })
     );
 
-    sendEmailToBusiness(
-      "Acme <onboarding@resend.dev>",
-      "wasiusikiru7@gmail.com",
+    sendEmail(
+      "Talktrack <support@talktrack.com>",
+      business.email,
       `New Appointment Submission: ${formTitle}`,
       emailContent
     );
 
     return updatedForm;
-  }, { timeout: 10000 });
+  }, { timeout: 20000 });
 }
 
 

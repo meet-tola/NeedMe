@@ -1,9 +1,7 @@
-import { Loader2 } from "lucide-react";
+import PageLoader from "@/components/page-loader";
 
 export default function Page() {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Loader2 className="dark:text-white animate-spin h-10 w-10" />
-    </div>
+    <PageLoader />
   );
 }

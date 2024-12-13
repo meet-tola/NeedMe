@@ -12,6 +12,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { Textarea } from "./ui/textarea";
 
 interface CancelAlertDialogProps {
   open: boolean;
@@ -27,6 +28,7 @@ export function CancelAppointmentBtn({
   shareURL,
 }: CancelAlertDialogProps) {
   const [loading, setLoading] = useState(false);
+  const [additionalMessage, setAdditionalMessage] = useState("");
 
   const handleCancel = async () => {
     setLoading(true);
@@ -35,7 +37,7 @@ export function CancelAppointmentBtn({
       return;
     }
     try {
-      await CancelAppointment(shareURL, id);
+      await CancelAppointment(shareURL, id, additionalMessage);
       toast({
         title: "Appointment Canceled",
         description: "The Appointment has been successfully canceled.",
@@ -63,6 +65,11 @@ export function CancelAppointmentBtn({
             This action cannot be undone. This will permanently cancel the
             appointment.
           </AlertDialogDescription>
+          <Textarea
+            placeholder="Add reason for cancelling appointment..."
+            value={additionalMessage}
+            onChange={(e) => setAdditionalMessage(e.target.value)}
+          />
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>No, go back</AlertDialogCancel>

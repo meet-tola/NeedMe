@@ -10,10 +10,6 @@ export default function Page() {
         <h1 className="text-3xl font-bold">Overviews</h1>
         <div className="flex items-center gap-2">
           <BusinessDetails />
-          <Button className="flex gap-2 items-center">
-            <Plus />
-            {/* Create Appointment  */}
-          </Button>
         </div>
       </div>
 

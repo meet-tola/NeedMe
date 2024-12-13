@@ -1,27 +1,26 @@
 "use server";
 
-import { Resend } from 'resend';
-import * as React from 'react';
-import EmailTemplate from '@/components/email-template/appointment-email';
+import nodemailer from 'nodemailer';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Create a transporter object using SMTP
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
-
-
-export async function sendEmailToBusiness(from: string, to: string, subject: string, emailContent: string) {
+export async function sendEmail(from: string, to: string, subject: string, emailContent: string) {
     try {
-        const { data, error } = await resend.emails.send({
+        const info = await transporter.sendMail({
             from,
-            to: [to],
+            to,  
             subject,
-            html: emailContent,
-          });
+            html: emailContent, 
+        });
 
-        if (error) {
-            throw new Error("Failed to send email: " + error.message);
-        }
-
-        return { data };
+        return { info };
     } catch (error: any) {
         throw new Error("Error occurred while sending email: " + error.message);
     }

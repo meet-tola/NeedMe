@@ -21,6 +21,7 @@ import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import Confetti from "react-confetti";
 import useDesigner from "@/hooks/useDesigner";
 import { useEffect, useState } from "react";
+import PageLoader from "../page-loader";
 
 
 export default function FormBuilder({ form }: { form: Form }) {
@@ -53,9 +54,7 @@ export default function FormBuilder({ form }: { form: Form }) {
 
   if (!isReady) {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-full">
-        <Loader2 className="animate-spin h-12 w-12" />
-      </div>
+      <PageLoader />
     );
   }
 

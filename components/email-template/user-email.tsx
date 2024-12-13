@@ -14,31 +14,27 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-interface AppointmentEmailProps {
-  businessName: string;
+interface UserEmailProps {
   userName: string;
+  businessName: string;
   formTitle: string;
-  submissionContent: string;
-  formId: number;
+  status: "Scheduled" | "Cancelled";
+  additionalMessage?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
-
-export const AppointmentEmail = ({
-  businessName,
+export const UserEmail = ({
   userName,
+  businessName,
   formTitle,
-  submissionContent,
-  formId,
-}: AppointmentEmailProps) => {
-  const appointmentUrl = `${baseUrl}/appointment/${formId}`;
+  status,
+  additionalMessage,
+}: UserEmailProps) => {
+  const isScheduled = status === "Scheduled";
 
   return (
     <Html>
       <Head />
-      <Preview>New Appointment Submission</Preview>
+      <Preview>Your Appointment Has Been {status}</Preview>
       <Body style={main}>
         <Container>
           <Section style={logo}>
@@ -57,26 +53,34 @@ export const AppointmentEmail = ({
           <Section style={content}>
             <Row>
               <Column>
-                <Heading style={heading}>Hello {businessName},</Heading>
+                <Heading style={heading}>Hello {userName},</Heading>
                 <Text style={paragraph}>
-                  You have received a new appointment submission from{" "}
-                  <b>{userName}</b>.
+                  Your appointment with <b>{businessName}</b> has been{" "}
+                  <b>{status}</b>.
                 </Text>
                 <Text style={paragraph}>
                   <b>Form Title:</b> {formTitle}
                 </Text>
-                <Text style={paragraph}>
-                  <b>Submission Content:</b>
-                </Text>
-                <Text style={submissionContentStyle}>{submissionContent}</Text>
-                <Text style={paragraph}>
-                  Click the button below to view the appointment details:
-                </Text>
-                <Row style={containerButton}>
-                  <Button style={button} href={appointmentUrl}>
-                    View Appointment
-                  </Button>
-                </Row>
+                {additionalMessage && (
+                  <Text style={paragraph}>
+                    <b>
+                      {isScheduled ? "Additional Message:" : "Reason for Cancellation:"}
+                    </b>{" "}
+                    {additionalMessage}
+                  </Text>
+                )}
+                {isScheduled && (
+                  <Text style={paragraph}>
+                    We’re excited to meet with you! Please wait to receive
+                    furtherd etails of your appointment.
+                  </Text>
+                )}
+                {!isScheduled && (
+                  <Text style={paragraph}>
+                    We're sorry that your appointment was canceled. Please reach
+                    out to <b>{businessName}</b> if you have any questions.
+                  </Text>
+                )}
               </Column>
             </Row>
           </Section>
@@ -97,15 +101,15 @@ export const AppointmentEmail = ({
   );
 };
 
-AppointmentEmail.PreviewProps = {
-  businessName: "Business Owner",
+UserEmail.PreviewProps = {
   userName: "John Doe",
+  businessName: "Acme Corp",
   formTitle: "Consultation Request",
-  submissionContent: "Looking forward to discussing the project in detail.",
+  status: "Scheduled",
   formId: 123,
-} as AppointmentEmailProps;
+} as UserEmailProps;
 
-export default AppointmentEmail;
+export default UserEmail;
 
 const main = {
   backgroundColor: "#fff",
@@ -133,29 +137,4 @@ const heading = {
 const paragraph = {
   fontSize: 16,
   marginBottom: 10,
-};
-
-const submissionContentStyle = {
-  fontSize: 16,
-  backgroundColor: "#f9f9f9",
-  padding: "10px",
-  borderRadius: 3,
-  border: "1px solid rgb(0,0,0, 0.1)",
-};
-
-const containerButton = {
-  display: "flex",
-  justifyContent: "center",
-  marginTop: 20,
-};
-
-const button = {
-  backgroundColor: "#007BFF",
-  borderRadius: 3,
-  color: "#FFF",
-  fontWeight: "bold",
-  border: "1px solid rgb(0,0,0, 0.1)",
-  cursor: "pointer",
-  padding: "12px 30px",
-  textDecoration: "none",
 };

@@ -9,7 +9,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScheduleAppointment } from "@/actions/user";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -36,22 +35,22 @@ export function ScheduleAppointmentBtn({
       return;
     }
     try {
-      await ScheduleAppointment(shareURL, id);
+      await ScheduleAppointment(shareURL, id, additionalMessage);
       toast({
         title: "Appointment Scheduled",
         description: "The Appointment has been successfully scheduled.",
       });
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       console.error(error);
       toast({
         title: "Error",
-        description: "Failed to schedule the appointment. Please try again later.",
+        description:
+          "Failed to schedule the appointment. Please try again later.",
         variant: "destructive",
       });
     } finally {
       setLoading(false);
-      console.log("Additional message:", additionalMessage);
       onOpenChange(false);
     }
   };

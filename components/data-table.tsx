@@ -31,7 +31,7 @@ export function DataTable({ shareURL }: { shareURL: string }) {
   const [cancelOpen, setCancelOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
-    const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -80,10 +80,10 @@ export function DataTable({ shareURL }: { shareURL: string }) {
             Pending
           </Badge>
         );
-      case "approved":
+      case "scheduled":
         return (
           <Badge variant="outline" className="bg-green-100 text-green-800">
-            Approved
+            Scheduled
           </Badge>
         );
       case "cancelled":
@@ -108,6 +108,7 @@ export function DataTable({ shareURL }: { shareURL: string }) {
             <TableRow>
               <TableHead>Customer</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Phone Number</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
@@ -119,36 +120,51 @@ export function DataTable({ shareURL }: { shareURL: string }) {
                 <TableRow key={row.id}>
                   <TableCell className="font-medium">{row.name}</TableCell>
                   <TableCell>{row.email}</TableCell>
+                  <TableCell>{row.phone}</TableCell>
                   <TableCell>
                     {new Date(row.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>{getStatusBadge(row.status)}</TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      {row.status === "cancelled" ? (
+                      {row.status === "cancelled" && (
                         <Button
                           size="sm"
                           onClick={() => handleAction("schedule", row.id)}
                         >
                           Reschedule
                         </Button>
-                      ) : (
-                        <>
-                          <Button
-                            size="sm"
-                            onClick={() => handleAction("schedule", row.id)}
-                          >
-                            Schedule
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => handleAction("cancel", row.id)}
-                          >
-                            Cancel
-                          </Button>
-                        </>
                       )}
+
+                      {row.status === "scheduled" && (
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleAction("cancel", row.id)}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+
+                      {row.status !== "cancelled" &&
+                        row.status !== "scheduled" && (
+                          <>
+                            <Button
+                              size="sm"
+                              onClick={() => handleAction("schedule", row.id)}
+                            >
+                              Schedule
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => handleAction("cancel", row.id)}
+                            >
+                              Cancel
+                            </Button>
+                          </>
+                        )}
+
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">

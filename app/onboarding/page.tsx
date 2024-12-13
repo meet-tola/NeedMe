@@ -69,8 +69,7 @@ export default function OnboardingPage() {
     try {
       await CreateBusiness(data);
       toast({
-        title: "Success",
-        description: "Business created successfully",
+        description: "Business profile created successfully",
       });
       router.push("/dashboard");
     } catch (error) {
