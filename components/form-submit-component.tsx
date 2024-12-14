@@ -1,12 +1,20 @@
 "use client";
 
-import React, { useCallback, useRef, useState, useTransition } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { FormElementInstance, FormElements } from "./builders/form-element";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import { SubmitForm } from "@/actions/form";
-import { Loader2, MousePointerClick } from "lucide-react";
-import { BusinessHeader } from "./business-header";
+import { CheckCircle, Loader2, MousePointerClick } from "lucide-react";
+import { BusinessFooter } from "./business-footer";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 function FormSubmitComponent({
   formUrl,
@@ -74,14 +82,43 @@ function FormSubmitComponent({
     }
   };
 
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowContent(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   if (submitted) {
     return (
       <div className="flex justify-center w-full h-full items-center p-8">
-        <div className="max-w-[620px] flex flex-col gap-4 flex-grow bg-background w-full p-8 overflow-y-auto border shadow-xl shadow-blue-700 rounded">
-          <h1 className="text-2xl font-bold">Form submitted</h1>
-          <p className="text-muted-foreground">
-            Thank you for submitting the form, you can close this page now.
-          </p>
+        <div className="max-w-[620px] flex flex-col gap-4 flex-grow bg-background w-full p-8 overflow-y-auto border shadow-xl shadow-blue-500 dark:shadow-blue-900 rounded-md">
+          <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
+            Form Submitted Successfully
+          </h1>
+          <div className="flex flex-col items-center space-y-6">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <CheckCircle className="w-20 h-20 text-purple-700" />
+            </motion.div>
+            {showContent && (
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center text-foreground text-lg"
+              >
+                Thank you for your appointment booking. We have received your
+                information and will process it shortly.{" "}
+                <span className="text-purple-700 hover:underline">
+                  <Link href={"/"}>Visit Talktrack to learn more</Link>
+                </span>
+              </motion.p>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -121,7 +158,7 @@ function FormSubmitComponent({
           {pending && <Loader2 className="animate-spin" />}
         </Button>
       </div>
-      <BusinessHeader />
+      <BusinessFooter />
     </div>
   );
 }

@@ -42,16 +42,16 @@ export function Navbar() {
               Dashboard
             </Link>
             <Link
-              href="#"
+              href="/appointments"
               className="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
             >
-              Appointment
+              Appointments
             </Link>
             <Link
-              href="#"
+              href="/notifications"
               className="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
             >
-              Notification
+              Notifications
             </Link>
             <Link
               href="#"
@@ -85,16 +85,10 @@ export function MobileMenu() {
           Dashboard
         </Link>
         <Link
-          href="#"
+          href="/appointments"
           className="block py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
         >
-          Team
-        </Link>
-        <Link
-          href="#"
-          className="block py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
-        >
-          Projects
+          Appointments
         </Link>
       </nav>
       <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
@@ -103,8 +97,10 @@ export function MobileMenu() {
           size="sm"
           className="w-full justify-start mb-2 text-gray-700 dark:text-gray-300"
         >
-          <Bell className="h-5 w-5 mr-2" />
-          Notifications
+          <Link href={"/notifications"}>
+            <Bell className="h-5 w-5 mr-2" />
+            Notifications
+          </Link>
         </Button>
         <Button
           variant="ghost"

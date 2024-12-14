@@ -24,7 +24,7 @@ function PublishFormBtn({ id }: { id: number }) {
     try {
       await PublishForm(id);
       toast({
-        title: "Success",
+        title: "Form Publish",
         description: "Your form is now available to the public",
       });
       router.refresh();

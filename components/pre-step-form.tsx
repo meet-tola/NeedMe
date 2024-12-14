@@ -10,7 +10,7 @@ import { UserSchemaType, userSchema } from "@/schema/users";
 import { CreateUserDetails } from "@/actions/user";
 import FormSubmitComponent from "@/components/form-submit-component";
 import { FormElementInstance } from "./builders/form-element";
-import { BusinessHeader } from "./business-header";
+import { BusinessFooter } from "./business-footer";
 
 export default function PreStepForm({
   formUrl,
@@ -41,8 +41,7 @@ export default function PreStepForm({
       const userDetails = await CreateUserDetails(values);
       setUserId(userDetails.id);
       toast({
-        title: "Success",
-        description: "Form submitted successfully",
+        description: "Your details has been submitted..",
       });
 
       setPreStepCompleted(true);
@@ -68,7 +67,7 @@ export default function PreStepForm({
 
   return (
     <div className="flex flex-col gap-10 justify-center w-full h-full items-center pt-8">
-      <div className="max-w-[620px] flex flex-col gap-4 flex-grow bg-background w-full p-8 overflow-y-auto border shadow-xl shadow-blue-500 dark:shadow-blue-900 rounded-md">
+      <div className="max-w-[620px] flex flex-col gap-4 flex-grow bg-background w-full p-8 border shadow-xl shadow-blue-500 dark:shadow-blue-900 rounded-md">
         <h1 className="text-2xl font-bold text-center ">
           Welcome to Talktrack Form
         </h1>
@@ -137,7 +136,7 @@ export default function PreStepForm({
           </Button>
         </form>
       </div>
-      <BusinessHeader />
+      <BusinessFooter />
 
     </div>
   );

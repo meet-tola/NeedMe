@@ -14,7 +14,7 @@ import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { Slider } from "../ui/slider";
-import { ImageUpscale } from "lucide-react";
+import { TextSelect } from "lucide-react";
 
 const type: ElementsType = "TextAreaField";
 
@@ -42,7 +42,7 @@ export const TextAreaFormElement: FormElement = {
     extraAttributes,
   }),
   designerBtnElement: {
-    icon: ImageUpscale,
+    icon: TextSelect,
     label: "TextArea Field",
   },
   designerComponent: DesignerComponent,

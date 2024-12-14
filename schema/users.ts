@@ -5,7 +5,7 @@ export const userSchema = z.object({
     email: z.string().email("Invalid email address"),
     phone: z
       .string()
-      .regex(/^\d{11}$/, "Phone number must be exactly 10 digits"),
+      .regex(/^\d{11}$/, "Phone number must be exactly 11 digits"),
       formShareURL: z.string().min(1, "Invalid formId"),
   });
   

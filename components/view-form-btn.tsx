@@ -25,9 +25,9 @@ export function ViewFormBtn({ open, onOpenChange, id }: ViewFormDialogProps) {
         setLoading(true);
         try {
           const fetchedForm = await GetFormWithSubmissionByUserDetails(id);
+          console.log("fetched Form", fetchedForm);
+
           setForm(fetchedForm);
-          console.log("fetchedForm", fetchedForm);
-          
         } catch (error) {
           console.error("Failed to fetch form:", error);
           setForm(null);
@@ -38,40 +38,62 @@ export function ViewFormBtn({ open, onOpenChange, id }: ViewFormDialogProps) {
     }
   }, [id]);
 
-  const renderFields = (fields: any[]) => {
+  const renderFields = (
+    fields: any[],
+    submissionContent: Record<string, string>
+  ) => {
     return fields.map((field) => {
-      const { type, extraAttributes } = field;
-      const { title, label, options } = extraAttributes || {};
+      const { id, type, extraAttributes } = field;
+      const { title, label } = extraAttributes || {};
+      const contentValue = submissionContent[id];
 
       switch (type) {
         case "TitleField":
           return (
-            <div key={field.id}>
+            <div key={id}>
               <strong>Title:</strong> {title}
             </div>
           );
         case "SubTitleField":
           return (
-            <div key={field.id}>
+            <div key={id}>
               <strong>Subtitle:</strong> {title}
             </div>
           );
         case "TextField":
           return (
-            <div key={field.id}>
-              <strong>Text (label):</strong> {label}
+            <div key={id}>
+              <strong>Text:</strong> {contentValue || label}
+            </div>
+          );
+        case "NumberField":
+          return (
+            <div key={id}>
+              <strong>Number:</strong> {contentValue || label}
+            </div>
+          );
+        case "TextAreaField":
+          return (
+            <div key={id}>
+              <strong>Text Area:</strong> {contentValue || label}
             </div>
           );
         case "SelectField":
           return (
-            <div key={field.id}>
-              <strong>Select Dropdown (label):</strong> {label}
+            <div key={id}>
+              <strong>Select Dropdown:</strong> {contentValue || label}
             </div>
           );
         case "CheckboxField":
           return (
-            <div key={field.id}>
-              <strong>Checkbox (label):</strong> {label}
+            <div key={id}>
+              <strong>Checkbox:</strong> {contentValue || label}
+            </div>
+          );
+        case "DateField":
+          return (
+            <div key={id}>
+              <strong>Date:</strong> {contentValue || label}
             </div>
           );
         default:
@@ -108,24 +130,30 @@ export function ViewFormBtn({ open, onOpenChange, id }: ViewFormDialogProps) {
                 <div>
                   <strong>Submissions:</strong>{" "}
                   {form.FormSubmissions.map(
-                    (submission: any, index: number) => (
-                      <div key={index} className="border p-2 rounded-md my-2">
-                        <p>
-                          <strong>Submitted At:</strong>{" "}
-                          {formatDistance(
-                            new Date(submission.createdAt),
-                            new Date(),
-                            { addSuffix: true }
-                          )}
-                        </p>
-                        <div>
-                          <strong>Fields:</strong>
-                          <div className="space-y-2">
-                            {renderFields(JSON.parse(form.content))}
+                    (submission: any, index: number) => {
+                      const submissionContent = JSON.parse(submission.content);
+                      return (
+                        <div key={index} className="border p-2 rounded-md my-2">
+                          <p>
+                            <strong>Submitted At:</strong>{" "}
+                            {formatDistance(
+                              new Date(submission.createdAt),
+                              new Date(),
+                              { addSuffix: true }
+                            )}
+                          </p>
+                          <div>
+                            <strong>Fields:</strong>
+                            <div className="space-y-2">
+                              {renderFields(
+                                JSON.parse(form.content),
+                                submissionContent
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )
+                      );
+                    }
                   )}
                 </div>
               </div>

@@ -1,4 +1,3 @@
-import { BusinessHeader } from "@/components/business-header";
 import Logo from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
@@ -17,7 +16,7 @@ function Layout({ children }: { children: ReactNode }) {
           </div>
         </div>
       </nav>
-      <div className="pattern-dots pattern-gray-100 pattern-bg-white dark:pattern-gray-900 dark:pattern-bg-black pattern-size-4 pattern-opacity-100">
+      <div className="pattern-dots pattern-gray-100 pattern-bg-white dark:pattern-gray-900 dark:pattern-bg-black pattern-size-4 pattern-opacity-100 h-full">
         {children}
       </div>
       

@@ -108,7 +108,7 @@ export function DataTable({ shareURL }: { shareURL: string }) {
             <TableRow>
               <TableHead>Customer</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Phone Number</TableHead>
+              <TableHead>Phone</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>

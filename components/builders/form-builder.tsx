@@ -54,7 +54,9 @@ export default function FormBuilder({ form }: { form: Form }) {
 
   if (!isReady) {
     return (
-      <PageLoader />
+      <div className="flex items-center justify-center h-screen w-screen">
+      <Loader2 className="dark:text-white animate-spin h-10 w-10" />
+    </div>
     );
   }
 
