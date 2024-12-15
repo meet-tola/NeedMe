@@ -407,4 +407,3 @@ function RoadmapStep({ icon, title, description, index }: RoadmapStepProps) {
     </motion.div>
   );
 }
-

@@ -136,7 +136,7 @@ export default function PreStepForm({
           </Button>
         </form>
       </div>
-      <BusinessFooter />
+      {/* <BusinessFooter /> */}
 
     </div>
   );

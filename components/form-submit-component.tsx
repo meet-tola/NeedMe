@@ -158,7 +158,7 @@ function FormSubmitComponent({
           {pending && <Loader2 className="animate-spin" />}
         </Button>
       </div>
-      <BusinessFooter />
+      {/* <BusinessFooter /> */}
     </div>
   );
 }
