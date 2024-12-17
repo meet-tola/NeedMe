@@ -35,6 +35,18 @@ export const AppointmentEmail = ({
 }: AppointmentEmailProps) => {
   const appointmentUrl = `${baseUrl}/appointment/${formId}`;
 
+  // Parse and format the submission content
+  let formattedSubmissionContent = submissionContent;
+  try {
+    const parsedContent = JSON.parse(submissionContent);
+    formattedSubmissionContent = Object.values(parsedContent)
+      .join("\n") // Joins values with line breaks for readability
+      .trim();
+  } catch (error) {
+    console.error("Invalid JSON content:", error);
+    // Keep original content if parsing fails
+  }
+
   return (
     <Html>
       <Head />
@@ -68,7 +80,9 @@ export const AppointmentEmail = ({
                 <Text style={paragraph}>
                   <b>Submission Content:</b>
                 </Text>
-                <Text style={submissionContentStyle}>{submissionContent}</Text>
+                <Text style={submissionContentStyle}>
+                  {formattedSubmissionContent}
+                </Text>
                 <Text style={paragraph}>
                   Click the button below to view the appointment details:
                 </Text>
@@ -101,7 +115,7 @@ AppointmentEmail.PreviewProps = {
   businessName: "Business Owner",
   userName: "John Doe",
   formTitle: "Consultation Request",
-  submissionContent: "Looking forward to discussing the project in detail.",
+  submissionContent: `{"310":"sdfgh","5999":"Virtual Meeting (Zoom/Teams)","9018":"Mon, 23 Dec 2024 23:00:00 GMT","9551":"sdfgh"}`,
   formId: 123,
 } as AppointmentEmailProps;
 
@@ -141,6 +155,7 @@ const submissionContentStyle = {
   padding: "10px",
   borderRadius: 3,
   border: "1px solid rgb(0,0,0, 0.1)",
+  whiteSpace: "pre-wrap", // Preserve line breaks
 };
 
 const containerButton = {

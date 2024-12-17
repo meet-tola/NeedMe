@@ -317,7 +317,7 @@ export async function SubmitForm(
     );
 
     sendEmail(
-      "wasiusikiru7@gmail.com",
+      "Talktrack <wasiusikiru7@gmail.com>",
       business.email,
       `New Appointment Submission: ${formTitle}`,
       emailContent
