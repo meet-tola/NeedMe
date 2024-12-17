@@ -21,24 +21,19 @@ import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import Confetti from "react-confetti";
 import useDesigner from "@/hooks/useDesigner";
 import { useEffect, useState } from "react";
-import PageLoader from "../page-loader";
-
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogClose, DialogFooter } from "@/components/ui/dialog";
 
 export default function FormBuilder({ form }: { form: Form }) {
   const { setElements, setSelectedElement } = useDesigner();
   const [isReady, setIsReady] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(true); // State to control the dialog visibility
 
   const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: {
-      distance: 10, // 10px
-    },
+    activationConstraint: { distance: 10 }, // 10px
   });
 
   const touchSensor = useSensor(TouchSensor, {
-    activationConstraint: {
-      delay: 300,
-      tolerance: 5,
-    },
+    activationConstraint: { delay: 300, tolerance: 5 },
   });
 
   const sensors = useSensors(mouseSensor, touchSensor);
@@ -55,8 +50,8 @@ export default function FormBuilder({ form }: { form: Form }) {
   if (!isReady) {
     return (
       <div className="flex items-center justify-center h-screen w-screen">
-      <Loader2 className="dark:text-white animate-spin h-10 w-10" />
-    </div>
+        <Loader2 className="dark:text-white animate-spin h-10 w-10" />
+      </div>
     );
   }
 
@@ -111,28 +106,50 @@ export default function FormBuilder({ form }: { form: Form }) {
   }
 
   return (
-    <DndContext sensors={sensors}>
-      <main className="flex flex-col w-full h-screen">
-        <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
-          <h2 className="truncate font-medium">
-            <span className="text-muted-foreground mr-2">Form:</span>
-            {form.name}
-          </h2>
-          <div className="flex items-center gap-2">
-            <PreviewDialogBtn />
-            {!form.published && (
-              <>
-                <SaveFormBtn id={form.id} />
-                <PublishFormBtn id={form.id} />
-              </>
-            )}
+    <>
+      {/* Dialog to pop up automatically */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Form Information</DialogTitle>
+            <DialogDescription>
+              User details will be asked in the form automatically, so there's no need to add those fields manually.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Close
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Main content */}
+      <DndContext sensors={sensors}>
+        <main className="flex flex-col w-full h-screen">
+          <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
+            <h2 className="truncate font-medium">
+              <span className="text-muted-foreground mr-2">Form:</span>
+              {form.name}
+            </h2>
+            <div className="flex items-center gap-2">
+              <PreviewDialogBtn />
+              {!form.published && (
+                <>
+                  <SaveFormBtn id={form.id} />
+                  <PublishFormBtn id={form.id} />
+                </>
+              )}
+            </div>
+          </nav>
+          <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-[200px] bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)]">
+            <Designer />
           </div>
-        </nav>
-        <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-[200px] bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)]">
-          <Designer />
-        </div>
-      </main>
-      <DragOverlayWrapper />
-    </DndContext>
+        </main>
+        <DragOverlayWrapper />
+      </DndContext>
+    </>
   );
 }
